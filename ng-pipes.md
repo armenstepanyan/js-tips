@@ -51,5 +51,24 @@ export class MyModule {}
 ```
 If SquarePipe defined in separate module(MyModule) we can use it by importing MyModule, and in MyModule we need to export that pipe.
 
+### Create Safe Html pipe
+```
+import { Pipe, PipeTransform } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+@Pipe({
+  name: 'safeHtml',
+})
+export class SafeHtmlPipe implements PipeTransform {
+  constructor(private sanitizer: DomSanitizer) {}
+
+  transform(value: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(value);
+  }
+}
+```
+Usage 
+```
+<div [innerHtml]="message | safeHtml"></div>
+```
 
