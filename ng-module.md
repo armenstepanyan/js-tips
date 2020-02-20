@@ -46,7 +46,7 @@ import { DashboardComponent } from './dashboard.component';
     DashboardRoutingModule,
   ]
 })
-export class PasswordChangeModule { }
+export class DashboardModule { }
 
 ```
 
