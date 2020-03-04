@@ -4,6 +4,7 @@ At first we need to import  ReactiveFormsModule to our module
 module.ts
 ``` import { ReactiveFormsModule } from '@angular/forms' ```
 
+
 component.ts
 ```
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
