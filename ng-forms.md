@@ -16,7 +16,7 @@ export class ConfigComponent implements OnInit {
 
   ngOnInit() {
     this.submitForm = this.fb.group({
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.pattern(/^[a-zA-Z0-9-]+$/), Validators.maxLength(15)]],
     });
 
 
@@ -32,3 +32,10 @@ export class ConfigComponent implements OnInit {
 }
 ```
 
+Display errors in html
+
+```
+<p *ngIf="submitForm.get('name').hasError('required')">Field is required</p>
+<p *ngIf="submitForm.get('name').hasError('pattern')">Disallowed characters</p>
+<p *ngIf="submitForm.get('name').hasError('maxlength')">Max length is 15</p>
+```
