@@ -2,6 +2,7 @@
 At first we need to import  ReactiveFormsModule to our module
 
 module.ts
+
 ``` import { ReactiveFormsModule } from '@angular/forms' ```
 
 
@@ -30,6 +31,14 @@ export class ConfigComponent implements OnInit {
   }
 
 }
+```
+
+html
+
+```
+<form [formGroup]="submitForm" >
+....
+</form>
 ```
 
 Display errors in html
