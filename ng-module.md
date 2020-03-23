@@ -20,6 +20,10 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent
   },
+  {
+    path: 'item1', // route relative to dashboard
+    component: itemComponent,
+  },
 ];
 
 @NgModule({
@@ -57,3 +61,8 @@ Then add in main route
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
   },
   ```
+
+Create subroute relative to dashboard,  dashboard/item1
+```
+{ path: 'item1', } // without '/'
+```
