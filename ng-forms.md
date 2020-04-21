@@ -24,6 +24,7 @@ export class ConfigComponent implements OnInit {
   }
 
   save() {
+    this.submitForm.markAllAsTouched();
     if (this.submitForm.invalid) {
       return;
     }
@@ -37,7 +38,7 @@ html
 
 ```
 <form [formGroup]="submitForm" >
-....
+ <input type="text" formControlName="name">
 </form>
 ```
 
