@@ -66,3 +66,51 @@ Create subroute relative to dashboard,  dashboard/item1
 ```
 { path: 'item1', } // without '/'
 ```
+
+### Submodule router-outlet
+admin.html
+```
+<ul>
+  <li>
+    <a [routerLink]="['/admin', 'user-list']">User list</a>
+  </li>
+  <li>
+    <a [routerLink]="['/admin', 'contact']">Contact</a>
+  </li>
+</ul>
+<router-outlet></router-outlet>
+```
+
+admin-routing
+```
+import { AdminComponent } from "@app/admin/admin.component";
+
+const routes: Routes = [
+  {
+    path: '',
+    component: AdminComponent,
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'user-list',
+      },
+      {
+        path: 'user-list',
+        component: UserListComponent,
+      },
+      {
+        path: 'contact',
+        component: ContactComponent,
+      },
+    ],
+  },
+
+];
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class AdminRoutingModule {}
+```
