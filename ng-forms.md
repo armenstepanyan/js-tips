@@ -64,7 +64,7 @@ submitForm.patchValue({first: 'name1'});
 
 ## FormArray
 A FormArray is responsible for managing a collection of AbstractControl, which can be a FormGroup, a FormControl, 
-or another FormArray
+or another FormArray. [Example on Stackblitz](https://stackblitz.com/edit/a-form-array-group)
 
 ```
 export class AppComponent implements OnInit {
