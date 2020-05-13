@@ -39,3 +39,77 @@ promise
   )
 
 ```
+## Load script using Promise
+```
+function loadScript(url) {
+  return new Promise((resolve, reject) => {
+
+    const script = document.createElement("script");
+    script.src = url;
+
+    script.onload = () => {
+     // script is loaded successfully, call resolve()
+      resolve("loaded");
+    };
+
+    script.onerror = () => {
+      // script is not loaded, call reject()
+      reject("error");
+    };
+
+    document.head.appendChild(script);
+  });
+}
+```
+
+Usage [Example on Stackblitz](https://stackblitz.com/edit/t-promise?embed=1&file=index.ts)
+
+```
+  loadScript(url)
+    .then(
+      result => {
+        console.log("Success: ", result);
+      },
+      error => {
+        console.log("Reject: ", error);
+      }
+    )
+    .catch(error => {
+      console.log("Catch error: ", error);
+    });
+```
+
+Validate image
+```
+function validateImage(imageSrc: string) {
+  return new Promise((resolve, reject) => {
+    if (!imageSrc) {
+      reject('invalid url');
+      return;
+    }
+    const img = new Image();
+    img.onload = () => {
+      resolve('success');
+    };
+    img.onerror = () => {
+      reject('error');
+    };
+    img.src = imageSrc;
+  });
+}
+
+  validateImage(url)
+    .then(
+      success => {
+        // image is loaded
+      },
+      error => {
+        // image is not loaded
+      }
+    )
+    .catch(error => {
+      // Catch other errors like 404 or 500
+      
+    });
+
+```
