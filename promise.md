@@ -113,3 +113,42 @@ function validateImage(imageSrc: string) {
     });
 
 ```
+
+## Promise chain
+
+```
+new Promise(function(resolve, reject) {
+
+  setTimeout(() => resolve(1), 1000); // (line 1)
+
+}).then(function(result) { // (line 2)
+
+  alert(result); // 1
+  return result * 2;
+
+}).then(function(result) { // (line 3)
+
+  alert(result); // 2
+  return result * 2;
+
+}).then(function(result) {
+
+  alert(result); // (line 4)
+  return result * 2;
+
+});
+```
+[Example](https://stackblitz.com/edit/t-promise2?embed=1&file=index.ts)
+
+Here the flow is:
+
+- The initial promise resolves in 1 second (line 1),
+- Then the .then handler is called (line 2).
+- The value that it returns is passed to the next .then handler (line 3)
+- …and so on
+
+As the result is passed along the chain of handlers, we can see a sequence of alert calls: 1 → 2 → 4
+
+Instead of ` return result * 2;` we can return `Promise.resolve(result * 2)`
+The whole thing works, because a call to promise.then returns a promise, so that we can call the next `.then` on it.
+
