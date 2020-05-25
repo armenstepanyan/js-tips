@@ -152,3 +152,41 @@ As the result is passed along the chain of handlers, we can see a sequence of al
 Instead of ` return result * 2;` we can return `Promise.resolve(result * 2)`
 The whole thing works, because a call to promise.then returns a promise, so that we can call the next `.then` on it.
 
+## Promise.all
+Promise.all takes an array of promises (it technically can be any iterable, but is usually an array) and returns a new promise.
+The new promise resolves when all listed promises are settled, and the array of their results becomes its result.
+[Stackblitz example](https://stackblitz.com/edit/a-promise-all-settled?embed=1&file=index.js)
+
+```
+const promise = value => {
+  return  new Promise((resolve) => {
+  setTimeout(() => { 
+    resolve(value); 
+  }, value * 100);
+})
+
+}
+
+const p1 = promise(20);
+const p2 = promise(30);
+
+Promise.all([p1, p2]).then(data => {
+  console.log(data); // data = [20, 30] after 3 second
+})
+```
+
+If any of the promises is rejected, the promise returned by Promise.all immediately rejects with that error.
+```
+Promise.all([
+  new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
+]).catch(alert);
+```
+After 2 second will catch error `Error!`. In case of an error, other promises are ignored. If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored. `Promise.all` does nothing to cancel them, as there’s no concept of 'cancellation' in promises
+
+## Promise.allSettled
+Promise.all rejects as a whole if any promise rejects. That’s good for 'all or nothing' cases, when we need all results successful to proceed. Promise.allSettled just waits for all promises to settle, regardless of the result. The resulting array has:
+
+- {status:"fulfilled", value:result} for successful responses,
+- {status:"rejected", reason:error} for errors.
