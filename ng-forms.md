@@ -170,3 +170,40 @@ To display error of formArray controls we need to get current control which retu
 submitForm.get('mapping').controls[actionIndex].get('id').hasError('required')
 ```
 
+## FormArray checkbox
+```
+values = ['Value 1', 'Value 2', 'Value 3'];
+  ngOnInit() {
+    this.myForm = this.fb.group({
+      color: this.fb.array([], [Validators.required])
+    });
+  }
+```
+
+On change function need to add or remove `FormControl()`
+```
+  updateChkbxArray(id, isChecked, key) {
+    const chArray = this.myForm.get(key) as FormArray;
+    if (isChecked) {
+      chArray.push(new FormControl(id));
+    } else {
+      const idx = chArray.controls.findIndex(x => x.value === id);
+      chArray.removeAt(idx);
+    }
+  }
+```
+Html
+```
+<mat-checkbox
+  *ngFor="let item of values"
+   (change)="updateChkbxArray(item, $event.checked, 'color')" 
+   value="item"
+></mat-checkbox>
+
+```
+Init with default selected values
+```
+  this.myForm = this.fb.group({
+    color: this.fb.array([ new FormControl('Value 2') ], [Validators.required])
+  });
+```
