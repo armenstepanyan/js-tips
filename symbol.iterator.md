@@ -49,7 +49,7 @@ for (let num of range) {
 - Instead, another object, a so-called “iterator” is created by the call to `range[Symbol.iterator]()`, and its next() generates values for the iteration.
 
 
-````
+```
 var myIterable = {}
 myIterable[Symbol.iterator] = function* () {
     yield 1;
@@ -58,6 +58,7 @@ myIterable[Symbol.iterator] = function* () {
 };
 [...myIterable] // [1, 2, 3]
 ```
+
 Technically, we may merge them and use range itself as the iterator to make the code simpler. Like this:
 
 ```
@@ -134,10 +135,13 @@ for (let item of route) {
 ```
 
 Output
-```  
+
+```
 "Moscow" 
 "New York" 
 "London" 
+
 ```
+
 [JSbin example](https://jsbin.com/xagisik/2/edit?js,console)
 
