@@ -11,6 +11,75 @@ console.log(rangeIterator.next()); // {value: "9", done: false}
 console.log(rangeIterator.next()); // {done: true}
 ```
 
+```
+Iterable {
+  [Symbol.iterator](): Iterator 
+}
+
+Iterator {
+  next(): IResultObj;
+}
+
+IResultObj {
+  value: any;
+  done: bool;
+}
+
+```
+
+### Create simple iterator
+```
+const iterable = [1,2,3];
+
+function createInterator(array) {
+  let count = 0;
+  return {    
+    next: function () {      
+      return count < array.length ? { value: array[count++], done: false } : { value: undefined, done: true }      
+    }    
+  };
+    
+}
+
+const myIterator = createInterator(iterable);
+
+console.log( myIterator.next() );  // { done: false, value: 1 }
+console.log( myIterator.next() );  // { done: false, value: 2 }
+console.log( myIterator.next() );  // { done: false, value: 3 }
+console.log( myIterator.next() );  // { done: true, value: undefined }
+```
+
+### Object iterator
+```
+const person = {
+  name: 'John',
+  lastName: 'Doe',
+  age: 21
+};
+
+person[Symbol.iterator] = function() {
+  let props = Object.keys(this);
+  let count = 0;
+  let isDone = false;
+  let next = () => {
+    if (count >= props.length) {
+      isDone = true;
+    } 
+    return {
+      done: isDone,
+      value: this[props[count++]]
+    }
+  }
+  return { next }
+}
+
+for(let p of person) {
+  console.log(p) // "John", "Doe", 21
+}
+```
+
+[Example](https://jsbin.com/socijuf/2/edit?js,console)
+
 ### Create range iterator
 ```
 let range = {
