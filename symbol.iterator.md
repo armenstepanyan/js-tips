@@ -80,6 +80,37 @@ for(let p of person) {
 
 [Example](https://jsbin.com/socijuf/2/edit?js,console)
 
+
+### Object iterator by keys
+```
+const myIterable = {
+  a: 1,
+  b: 2,
+  c: 3
+}
+
+myIterable[Symbol.iterator] = function* () {
+  const keys = Object.keys(this);
+
+  for (let i=0; i< keys.length; i++) {
+    yield [ keys[i], this[keys[i]] ]; // or yield this[keys[i]]  if we want to return onlu values
+  }
+  
+  
+};
+
+console.log([...myIterable]);
+
+for(let [k, v] of myIterable) {  
+  console.log(k, v)  
+}
+
+```
+
+[Example](https://jsbin.com/leyiwec/1/edit?js,console)
+
+
+
 ### Create range iterator
 ```
 let range = {
