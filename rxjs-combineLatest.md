@@ -2,8 +2,8 @@
 When any observable emits a value, emit the last emitted value from each
 
 ```
-// timerOne emits first value at 1s, then once every 2s
-const timerOne$ = timer(1000, 2000);
+// timerOne emits first value at 1s, then once every 1s
+const timerOne$ = timer(1000, 1000);
 
 // timerTwo emits first value at 1s, then once every 4s
 const timerTwo$ = timer(1000, 4000);
@@ -36,6 +36,23 @@ Html
 ```
 <button id="btn">Toggle</button>
 ```
+
+Output
+```
+[1, 0]
+[2, 0]
+[3, 0]
+[4, 0]  // (1)
+[4, 1]  // (2)
+[5, 1]
+[6, 1]
+[7, 1]
+[8, 1] // (3)
+[8, 2] // (4)
+[9, 2]
+....
+```
+Lines `(1)` and `(2)` will works in same time, because in this time both observables emits new value, we see `[4, 0]` and `[4,1]`. Same behavior at lines `(3)` and `(4)`
 
 Note: Timers will still works when we toggle the filter.
 
