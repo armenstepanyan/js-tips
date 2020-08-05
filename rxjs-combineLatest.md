@@ -56,4 +56,31 @@ Lines `(1)` and `(2)` will works in same time, because in this time both observa
 
 Note: Timers will still works when we toggle the filter.
 
-[Example](https://stackblitz.com/edit/a-combinelatest)
+[Stackblitz Example](https://stackblitz.com/edit/a-combinelatest)
+
+### Combine inputs changes
+```
+const name$ = fromEvent(document.getElementById('name'), 'input').pipe(map(event => event.target.value));
+const lastname$ = fromEvent(document.getElementById('lastname'), 'input').pipe(map(event => event.target.value));
+
+combineLatest([name$, lastname$]).subscribe({
+  next: ([name, lastname]) => {
+    console.log(name, lastname);
+    document.getElementById('full-name').innerText = `${name} ${lastname}`;
+  }
+})
+```
+Html 
+```
+<p>
+  <input type="text" id="name" placeholder="Name" autocomplete="off">
+</p>
+<p>
+  <input type="text" id="lastname" placeholder="Lastname" autocomplete="off">
+</p>
+<p>
+  Full name <b id="full-name"></b>
+</p>
+```
+**Note** We will see combined value of 2 inputs only when each observable emit at least one value. If we type in first input, we will not see result, we must type in second input also to see result.
+[Stackblitz Example](https://stackblitz.com/edit/a-combinelatest2)
