@@ -190,3 +190,5 @@ Promise.all rejects as a whole if any promise rejects. That’s good for 'all or
 
 - {status:"fulfilled", value:result} for successful responses,
 - {status:"rejected", reason:error} for errors.
+
+[Stackblitz Example](https://stackblitz.com/edit/a-promise-all-settled?file=index.js)
