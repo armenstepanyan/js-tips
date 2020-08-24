@@ -71,4 +71,50 @@ View
 
 [Stackblitz](https://stackblitz.com/edit/a-ngtemplateoutlet?file=src/app/menu.component.ts)
 
+### Input Output
+```
+@Component({
+  selector: 'app-list',
+  template: `   
+    <div>
+      <div [ngTemplateOutlet]="templateRef"></div>
+      <button (click)="addMore()"> Add more</button>
+    </div>
+  `,
+})
+export class ListComponent {
+  
+  @ContentChild(TemplateRef) templateRef: TemplateRef<any>;
+  @Input() list: Array<string> = [];
+  @Output() itemAdd = new EventEmitter<void>();
+
+  constructor() { }
+
+  addMore() {
+    this.itemAdd.emit();
+  }
+
+  removeItem(index: number) {
+    this.list.splice(index,1);
+  }
+  
+  
+}
+```
+
+View
+
+```
+<app-list [list]="list" #wrapper (itemAdd)="addNewItem()">
+  <ng-template>
+    <ul>
+      <li *ngFor="let item of list; let i = index">
+        {{ item }}
+        <button (click)="wrapper.removeItem(i)"> &times;</button>
+      </li>
+    </ul>
+  </ng-template>
+</app-list>
+```
+The wrapper component `app-list` receive `list` as input, handle remove and emit output event when add new item. In view to call wrapper component function, we need to make reference to it `#wrapper` and then use functions - `wrapper.removeItem(i)`
 
