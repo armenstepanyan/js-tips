@@ -34,6 +34,13 @@ View
 
 ```
 
+Or same we can use with `*ngTemplateOutlet`
+```
+<ng-container *ngTemplateOutlet="templateRef; context: menu[0]"></ng-container>
+<div *ngTemplateOutlet="templateRef; context: menu[1]"></div>
+```
+
+
 Create wrapper component
 ```
 @Component({
