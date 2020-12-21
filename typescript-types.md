@@ -68,4 +68,8 @@ console.log(nav.about)
      }
 ```
 
-
+### Run
+```
+- tsc `file.ts`
+- node `file.js`
+```
