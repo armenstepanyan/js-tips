@@ -1,3 +1,5 @@
+## Utility Types
+
 ### Partial<Type>
 Constructs a type with all properties of `Type` set to optional. This utility will return a type that represents all subsets of a given type.
 ```
@@ -67,6 +69,42 @@ console.log(nav.about)
       [key: Page]: PageInfo
      }
 ```
+
+### Pick<Type, Keys>
+Constructs a type by picking the set of properties Keys from Type. This will get get only specified properties from given type and create new one.
+```
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type TodoPreview = Pick<Todo, "title" | "completed">;
+
+const todo: TodoPreview = {
+  title: "Clean room",
+  completed: false,
+};
+```
+
+### Omit<Type, Keys>
+Constructs a type by picking all properties from Type and then removing Keys.
+```
+interface Todo {
+  title: string;
+  description: string;
+  completed: boolean;
+}
+
+type TodoPreview = Omit<Todo, "description">;
+
+const todo: TodoPreview = {
+  title: "Clean room",
+  completed: false,
+};
+
+```
+
 
 ### Run
 ```
