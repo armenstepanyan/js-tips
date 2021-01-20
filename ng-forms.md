@@ -196,7 +196,8 @@ Html
 ```
 <mat-checkbox
   *ngFor="let item of values"
-   (change)="updateChkbxArray(item, $event.checked, 'color')" 
+   (change)="updateChkbxArray(item, $event.checked, 'color')"
+   [checked]="myForm.get('color')?.value.includes(item)"
    value="item"
 ></mat-checkbox>
 
