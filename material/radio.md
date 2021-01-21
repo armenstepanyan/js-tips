@@ -40,3 +40,44 @@ export class RadioNgModelExample {
 }
 ```
 [Stackblitz](https://stackblitz.com/edit/angular-mat-radio?file=src/app/radio-ng-model-example.ts)
+
+### Set checked from component
+html
+```
+  <mat-radio-button
+    *ngFor="let item of values"
+    #radioBtn
+    (click)="radioClick($event)"
+    [value]="item.label"
+    [name]="id"
+  >
+    {{ item.label }}
+  </mat-radio-button>
+```
+Controller
+```
+export class RadioItemComponent implements OnInit, AfterViewInit {
+  @Input() values;
+
+  @ViewChildren('radioBtn') radioBtnList: QueryList<MatRadioButton>;
+  constructor() {}
+
+  ngOnInit() {}
+
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.setChecked();
+    }, 100);
+  }
+
+  setChecked() {
+    const elements = this.radioBtnList.toArray();
+    elements.map(el => {
+      if (el.value === this.group.get(this.field.id).value) {
+        el.checked = true;
+      }
+    });
+  }
+
+}
+```
