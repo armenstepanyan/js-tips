@@ -41,3 +41,37 @@ export class AppComponent implements OnInit {
 ```
 Now `count` and `number` will be updated in view per 2 seconds
 [Stackblitz](https://stackblitz.com/edit/a-ngzone?file=src/app/app.component.ts)
+
+```
+import { Component, NgZone, OnInit } from "@angular/core";
+
+export class AppComponent implements OnInit {
+  number = 0;
+  check = 0;
+  constructor() {}
+
+  ngOnInit() { }
+
+  ngDoCheck() {
+      this.check++;
+      console.log('check ', this.check)
+    }
+
+    test() {
+      this.number = Math.random();
+      // setTimeout
+      setTimeout(() => {
+        console.log('setTimeout')
+      }, 1000)
+    }
+
+
+}
+```
+View
+```
+<button (click)="test()">Test</button>
+```
+After initialization we will see 2 check messages in console. After clicking on button we will see 1 check message for click, and 1 more for `setTimeOut`.
+Note: even if `test` function body is empty, angular will still check it  
+[Stackblitz](https://stackblitz.com/edit/a-ngzone-2?file=src/app/app.component.ts)
