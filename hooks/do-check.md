@@ -120,7 +120,7 @@ Parent check
 First component check
 Second component check
 Third component check
-(1)
+(2)
 Parent check
 First component check
 Second component check
