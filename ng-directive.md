@@ -78,8 +78,8 @@ export class BoldDirective{
 ```
 
 ### Interacting with user
-Our directive cn interact with user with `HostListener` and `HostBinding`.
-The `@HostListener` decorator lets you subscribe to events of the DOM element that hosts an attribute directive, the <p> in this case.
+Our directive can interact with user with `HostListener` and `HostBinding`.
+The `@HostListener` decorator lets you subscribe to events of the DOM element that hosts an attribute directive, the `<p>` in this case.
 
 Of course you could reach into the DOM with standard JavaScript and attach event listeners manually. There are at least three problems with that approach:
 
@@ -124,7 +124,7 @@ private fontWeight = "normal";
         return "pointer";
     }
 ```
-Now on mouve over on element cursor will be changed to `pointer`. 
+Now on mouse over on element cursor will be changed to `pointer`. 
 `@HostBinding("style.fontWeight") get getFontWeight()` links with  `style.fontWeight` property, which return getter  `getFontWeight`. 
 And this getter return value `fontWeight` which is changing on mouse over.
 
