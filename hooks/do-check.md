@@ -137,6 +137,7 @@ First component check
 Second component check
 Third component check
 ```
+[Example](https://stackblitz.com/edit/a-angular-test?file=src/app/app.component.html)
 
 **Note** When you click on parent `doSomething` button, we will see those log messages 2 times. First comes from `click` event, and second runs after `setTimeout`. 
 Angular uses `Zone.js` which checks for changes after micro/macro(setTimeout, promise...) tasks .
