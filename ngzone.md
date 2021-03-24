@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
 Now `count` and `number` will be updated in view per 2 seconds
 [Stackblitz](https://stackblitz.com/edit/a-ngzone?file=src/app/app.component.ts)
 
+**Note** The functions inside `this.zone.runOutsideAngular(() => {})` will not trigger change detection. For example, if we put `setTimeout` or `setInterval` inside `zone.runOutsideAngular` then `ngDoCheck` will be not triggered.
+
 ```
 import { Component, NgZone, OnInit } from "@angular/core";
 
