@@ -151,6 +151,45 @@ export class SecondComponent {
 ```
 Without ` ref.detach` the  `get data` getter wil be called on any change (click, mouse move..). When we click on `Add value` button, `view` will be updated after 3 seconds.
 
+If inside view used `async` pipe, on subsription view will updated.
+
+```
+
+@Component({
+  selector: "app-first",
+  template: `
+    <p>{{ value$ | async }} </p>
+  `,
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FirstComponent {
+  numberOfTicks = 0;
+  value$ = new Subject();
+
+  constructor(private ref: ChangeDetectorRef) {    
+    setInterval(() => {
+      this.numberOfTicks++;
+      this.value$.next(this.numberOfTicks);
+    }, 1000);
+    
+  }
+
+}
+```
+In this example if we remove `async` from html, view will not updated. For example if subscription made in component it will not update the view.
+```
+// this will not update view
+    this.value$.subscribe(v => {
+      console.log(v)
+    })
+
+    setInterval(() => {
+      this.numberOfTicks++;
+     this.value$.next(this.numberOfTicks);
+    }, 1000);
+```
+
 ### Summary
 Angular change detection is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
 
