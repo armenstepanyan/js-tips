@@ -150,3 +150,12 @@ export class SecondComponent {
 
 ```
 Without ` ref.detach` the  `get data` getter wil be called on any change (click, mouse move..). When we click on `Add value` button, `view` will be updated after 3 seconds.
+
+### Summary
+Angular change detection is a built-in framework feature that ensures the automatic synchronization between the data of a component and its HTML template view.
+
+Change detection works by detecting common browser events like mouse clicks, HTTP requests, and other types of events, and deciding if the view of each component needs to be updated or not.
+There are two types of change detection:
+
+- Default change detection: Angular decides if the view needs to be updated by comparing all the template expression values before and after the occurrence of an event, for all components of the component tree
+- OnPush change detection: this works by detecting if some new data has been explicitly pushed into the component, either via a component input or an Observable subscribed to using the async pipe
