@@ -194,6 +194,69 @@ export default App;
 
 ```
 
+### Forms
+Controlled Components. Making the React state to be the “single source of truth”. Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in this way is called a **controlled component**
+
+Simple example
+```
+export class Form extends Component {
+    constructor(props) {
+        super(props)
+    
+        this.state = {
+             username: '',
+             topic: 'react'
+        }
+    }
+    
+    handleUsernameChange = event => {
+        this.setState({
+            username: event.target.value
+        })
+    }
+
+    handleTopicChange = event => {
+        this.setState({
+            topic: event.target.value
+        })
+    }
+
+    handleSubmit = event => {
+        event.preventDefault();
+        console.log(this.state)
+    }
+
+    render() {
+        return (
+            <form onSubmit={this.handleSubmit}>
+                <div>
+                    <label>Username</label>
+                    <input 
+                        type="text" 
+                        value={this.state.username} 
+                        onChange={this.handleUsernameChange}
+                    />
+                </div>
+                <div>
+                    <select value={this.state.topic} onChange={this.handleTopicChange}>
+                        <option value='vue'>Vuejs</option>
+                        <option value='react'>ReactJs</option>
+                        <option value='angular'>Angular</option>
+                    </select>
+                    </div>
+                    <p>
+                        <button>Submit</button>
+                    </p>
+                <p>{this.state.username}</p>
+                <p>{this.state.topic}</p>
+            </form>
+        )
+    }
+}
+
+export default Form
+```
+
 
 
 
