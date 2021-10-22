@@ -257,6 +257,52 @@ export class Form extends Component {
 export default Form
 ```
 
+### Counter example
+With function using `useState`
+```
+import React, { useState } from 'react';
 
+export default function Counter() {
+  const [count, setCount] = useState(0);
+  return (
+    <div>
+      <button onClick={() => setCount(count - 1)}>Decrement</button>
+      {count}
+      <button onClick={() => setCount(count + 1)}>Increment</button>
+    </div>
+  );
+}
+
+```
+
+Same example with class
+```
+import React from 'react';
+
+export class Counter2 extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      count: 0,
+    };
+  }
+
+  render() {
+    return (
+      <div>
+        <button onClick={() => this.setState({ count: this.state.count - 1 })}>
+          Decrement
+        </button>
+        {this.state.count}
+        <button onClick={() => this.setState({ count: this.state.count + 1 })}>
+          Increment
+        </button>
+      </div>
+    );
+  }
+}
+```
+
+[Stackblitz](https://stackblitz.com/edit/a-react-counter?file=src/Counter.js)
 
 
