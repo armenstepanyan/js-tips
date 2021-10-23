@@ -69,3 +69,34 @@ export class Navbar extends Component {
 
 export default Navbar
 ```
+
+### Using Context.Consumer
+```
+export class Navbar extends Component {
+
+
+    render() {
+        
+     return (
+        <ThemeContext.Consumer>{(context) => {
+            const { isLightTheme, light, dark } = context;
+            const theme = isLightTheme ? light : dark;
+            return (
+            <div style={{ background: theme.ui, color: theme.syntax }}>
+                <ul>
+                    <li>Home</li>
+                    <li>Dashboard</li>
+                </ul>
+            </div>
+            )
+            
+        }}
+        </ThemeContext.Consumer>
+      )
+        
+        
+    }
+}
+
+export default Navbar
+```
