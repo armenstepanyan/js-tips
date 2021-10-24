@@ -100,3 +100,29 @@ export class Navbar extends Component {
 
 export default Navbar
 ```
+
+### useContext for function components
+```
+  <ThemeContextProvider>
+    <FunctionContext />
+  </ThemeContextProvider>
+```
+
+```
+import React, { useContext } from 'react';
+import { ThemeContext } from './contexts/ThemeContext'
+
+const FunctionContext = () => {
+    const { isLightTheme, light, dark } = useContext(ThemeContext);
+    const theme = isLightTheme ? light : dark;
+
+    return (
+       
+        <div style={{background: theme.bg, color: theme.syntax}}>
+            Some text
+        </div>
+    )
+}
+
+export default FunctionContext
+```
