@@ -41,3 +41,37 @@ const [count, setCount] = useState(0);
 [Example Stackblitz](https://stackblitz.com/edit/react-a-react-useref?file=src/App.js)
 
 
+### Focusing input
+
+```
+import React, { useState, useRef } from 'react';
+
+export default function InputEl() {
+  const [input, setInput] = useState('');
+  const inputRef = useRef(); // define ref
+
+  const clickHandler = () => {
+    inputRef.current.focus();
+  };
+
+  return (
+    <div>
+      <input
+        ref={inputRef} // link ref to html element
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={clickHandler}>Focus</button>
+    </div>
+  );
+}
+
+[Example Stackblitz](https://stackblitz.com/edit/react-a-react-useref?file=src/InputEl.js)
+```
+
+
+
+
+
+
