@@ -67,11 +67,48 @@ export default function InputEl() {
   );
 }
 
-[Example Stackblitz](https://stackblitz.com/edit/react-a-react-useref?file=src/InputEl.js)
 ```
+[Example Stackblitz](https://stackblitz.com/edit/react-a-react-useref?file=src/InputEl.js)
 
 
+### ForwardRef
 
+Ref forwarding is a technique for automatically passing a ref through a component to one of its children
 
+Create wrapper component for input
+```
+import React from 'react';
+
+const CustomInput = (props, ref) => {
+  return <input ref={ref} {...props} />;
+};
+
+export default CustomInput;
+
+```
+Usage
+```
+    <div>
+      <CustomInput
+        ref={inputRef}
+        type="text"
+        value={input}
+        onChange={(e) => setInput(e.target.value)}
+      />
+      <button onClick={clickHandler}>Focus</button>
+    </div>
+```
+Now everything is works as before except `ref`. To pass ref to child component - CustomInput we must use `React.forwardRef`
+```
+import React from 'react';
+
+const CustomInput = React.forwardRef((props, ref) => {
+  return <input ref={ref} {...props} />;
+});
+
+export default CustomInput;
+````
+
+[Example forwardRef](https://stackblitz.com/edit/react-a-react-useref?file=src/Example3.js)
 
 
