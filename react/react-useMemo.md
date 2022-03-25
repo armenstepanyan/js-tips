@@ -1,7 +1,7 @@
 ```
 import React, { useState } from 'react'
 
-export default function MempComp() {
+export default function MemoComp() {
 
     const [number, setNumber] = useState(0);
     const [dark, setDark] = useState(false);
