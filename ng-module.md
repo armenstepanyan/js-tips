@@ -1,4 +1,5 @@
 ## Creating lazy load module
+Lazy loading is the technique where angular loads the Modules only on a need basis rather than all at once. It is also called `on-demand` loading. By default, Angular Loads the modules eagerly. Lazy Loading of Angular Modules reduces the initial load time of the app. We use the loadChilden method of the Angular Router to lazy load them when the user navigates to a route.
 Create module with routing
 
 ``` ng g m dashboard --routing ```
