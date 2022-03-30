@@ -82,7 +82,7 @@ admin.html
 <router-outlet></router-outlet>
 ```
 
-admin-routing
+admin-routing.ts
 ```
 import { AdminComponent } from "@app/admin/admin.component";
 
@@ -114,4 +114,136 @@ const routes: Routes = [
   exports: [RouterModule],
 })
 export class AdminRoutingModule {}
+```
+
+### Create canLoad guard
+Generate guard under `guards` folder
+```
+ng g guards/admin
+```
+
+src\app\guard\admin.guard.ts
+```
+import { Injectable } from '@angular/core';
+import { CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
+import { UserService } from '../service/user.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class AdminGuard implements CanLoad {
+  constructor(private userService: UserService){
+
+  }
+  canLoad(
+    route: Route,
+    segments: UrlSegment[]): Observable<boolean> | Promise<boolean> | boolean {
+
+    console.log(this.userService.admin$.value);
+    return this.userService.admin$.value;
+  }
+}
+```
+Admin modulae will be loaded only if user is admin
+Create `user.service`
+```
+ng g s service/user
+```
+
+```
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class UserService {
+
+  public admin$ = new BehaviorSubject<boolean>(false);
+  constructor() { }
+}
+
+```
+
+Create checkbox to toggle isAdmin
+app.component.html
+```
+<h2>
+  Main app
+</h2>
+
+<ul>
+  <li>
+    <a [routerLink]="['admin']">Admin</a>
+  </li>
+  <li>
+    <a [routerLink]="['profile']">Profile</a>
+  </li>
+</ul>
+
+<p>
+  <label>
+    <input type="checkbox" [checked]="isChecked" (click)="handleChange()"> Admin
+  </label>
+</p>
+
+<router-outlet></router-outlet>
+```
+
+app.component.ts
+```
+import { Component, OnInit } from '@angular/core';
+import { UserService } from './service/user.service';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.scss']
+})
+export class AppComponent implements OnInit {
+  title = 'ng-canload-test';
+  public isChecked = false;
+
+  constructor(private userService: UserService){
+
+  }
+
+  ngOnInit(){
+    this.userService.admin$.subscribe(val => {
+      this.isChecked = val;
+    })
+  }
+
+  handleChange(){
+    this.userService.admin$.next(!this.isChecked)
+  }
+
+}
+```
+
+admin-routing.module.ts
+```
+import { NgModule } from '@angular/core';
+import { Routes, RouterModule } from '@angular/router';
+import { AdminGuard } from './guard/admin.guard';
+
+
+const routes: Routes = [
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then(m => m.ProfileModule)
+  },
+  {
+    path: 'admin',
+    loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule),
+    canLoad: [AdminGuard] // <-- add guard here
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
 ```
