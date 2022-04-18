@@ -122,3 +122,90 @@ change() {
 }
 ```
 
+
+### ContentChild vs ViewChild
+`ContentChild` search element that was projected in component. In other words it get refer to element that is inside component opening/closing tags
+```
+<app-parent>
+  <h1>...</h1>
+  <app-child></app-child>
+</app-parent> 
+```
+Now to get reference of `app-child` we need to use `ContentChild`. For this example `ViewChild` will return undefined.In simple words ViewChild can get reference to elements that is inside component html
+
+Parent component usage
+```
+<app-content>
+  <app-date></app-date>
+</app-content>
+```
+
+Content.ts
+```
+export class ContentComponent implements OnInit, AfterContentInit  {
+
+  @ContentChild(DateComponent, { static: false }) dateComp: DateComponent;
+
+  constructor() {}
+
+  ngAfterContentInit(): void {
+    console.log(this.dateComp)
+  }
+
+
+  ngOnInit() {
+  // Now we can get/change public properties of DateComponent. 
+    setTimeout(() => {
+      this.dateComp.today = new Date();
+    }, 2000)
+  }
+
+}
+```
+
+Content.html
+```
+<p> Content works! </p>
+<ng-content></ng-content> <---- here will be displayed projection content
+
+```
+
+DateComponent
+```
+@Component({
+  selector: 'app-date',
+  template: `<p>Date is {{ today }}</p>`,
+  styleUrls: ['./date.component.scss']
+})
+export class DateComponent implements OnInit {
+
+  today = new Date();
+  constructor() { }
+
+  ngOnInit() {
+  }
+
+}
+
+```
+
+
+### ContentChildren
+Use to get the `QueryList` of elements or directives from the content DOM. Any time a child element is added, removed, or moved, the query list will be updated, and the changes observable of the query list will emit a new value
+
+```
+@ContentChildren(DateComponent) dateCompList: QueryList<DateComponent>;
+
+  ngAfterContentInit(): void {
+    console.log(this.dateCompList.toArray())
+  }  
+```
+View
+```
+<app-content>
+  <app-date></app-date>
+  <app-date></app-date>
+  <app-date></app-date>
+</app-content>
+```
+
