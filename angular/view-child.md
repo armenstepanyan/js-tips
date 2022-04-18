@@ -209,3 +209,26 @@ View
 </app-content>
 ```
 
+### Content projection select
+```
+<app-content>
+  <h1 header>This is header</h1>
+
+  <app-date></app-date>
+  <app-date></app-date>
+  <app-date></app-date>
+  <h3 footer>This is footer</h3>
+</app-content>
+```
+
+Content.html
+```
+<ng-content select="[header]"></ng-content>
+<p>content works!</p>
+
+<ng-content></ng-content>
+<p>Some info</p>
+<ng-content select="[footer]"></ng-content>
+```
+
+
