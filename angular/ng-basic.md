@@ -127,3 +127,92 @@ export class AppComponent  {
   </p>
 ```
 
+### Use emitEvent: false
+lets assume we have form and on form field value change we send save request
+```
+this.submitForm = this.fb.group({
+    title: [''],
+    description: [''],
+})
+```
+Create subscrition on form value change
+```
+this.submitForm
+    .valueChanges
+    .pipe(debounceTime(500))
+    .subscribe(data => {
+        this.sendRequestToBackend();
+    });
+```
+Now if we set form value with `this.submitForm.setValue({ ... })` it will trigger `this.submitForm.valueChanges` subscription again. To avoid this behavior need to pass `{emitEvent: false}` as argument
+
+```
+this.myService
+    .loadSettings()
+    .pipe(takeUntil(this.destroy$))
+    .subscribe(resp => {
+        this.submitForm.setValue({
+                title: resp.title,
+                description: resp.description
+            },
+            // skip emit on valueChanges subscriber
+            {
+                emitEvent: false,
+                onlySelf: true
+            },
+        )
+    });
+```
+
+### Get query params
+Listen query params change and make request to get single post by id
+```
+import {  ActivatedRoute,  Router } from '@angular/router';
+import { switchMap, takeUntil } from 'rxjs/operators';
+
+export class EditPostComponent implements OnInit {
+
+    destroy$ = new Subject();
+    post: Post;
+    constructor( private route: ActivatedRoute ) {}
+
+    ngOnInit(): void {
+
+        this.route.paramMap.pipe(
+            switchMap((params) => {
+                const id = params.get('id');
+                return this.myService.loadPostById(id)
+            }),
+            takeUntil(this.destroy$)
+        ).subscribe(data => {
+            this.post = data;
+        })
+
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
+}
+```
+
+### ng-container
+```
+<ng-container *ngIf="!(isAuthenticated$ | async); else logout">
+  <li class="nav-item">
+    <a class="nav-link" href="#" [routerLink]="['/auth']">Login</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="#" [routerLink]="['/auth/signup']">Signup</a>
+  </li>
+
+</ng-container>
+<ng-template #logout>
+  <li class="nav-item">
+    <a class="nav-link" href="#" [routerLink]="['/']">Logout</a>
+  </li>
+</ng-template>
+```
+
