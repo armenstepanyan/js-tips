@@ -208,3 +208,47 @@ Init with default selected values
     color: this.fb.array([ new FormControl('Value 2') ], [Validators.required])
   });
 ```
+
+### Template driven forms
+```
+<form #fieldKeyForm="ngForm">
+  <input
+    placeholder="Field Key"
+    [ngModel]="fieldKey"
+    (ngModelChange)="save($event)"
+    name="fieldKey"
+    #name="ngModel"
+    required
+  />
+
+  <p *ngIf="name?.errors?.required">Field is required</p>
+</form>
+<h3>Value is: {{ fieldKey }}</h3>
+
+```
+component.ts
+```
+import { Component, Output, EventEmitter, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+@Component({
+  selector: 'my-app',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+  @ViewChild('fieldKeyForm') currentForm: NgForm;
+  @Output() valueChange = new EventEmitter<any>();
+  fieldKey = '';
+
+  save($event) {
+    this.fieldKey = $event;
+    if (this.currentForm.form.get('fieldKey').hasError('required')) {
+      return;
+    }
+
+    this.valueChange.emit(this.fieldKey);
+  }
+}
+```
+[Example](https://stackblitz.com/edit/a-template-form?file=src/app/app.component.html)
