@@ -216,3 +216,31 @@ export class EditPostComponent implements OnInit {
 </ng-template>
 ```
 
+### zone.runOutsideAngular
+In case if we using setTimeout to change dom element behavior (size, value ...) we need to wrap it in `zone.runOutsideAngular` to skip changeDetection cycle
+
+```
+<input #searchInput (blur)="resetFilter(searchInput)" />
+```
+component
+```
+import { Component, OnInit, NgZone } from '@angular/core';
+
+@Component({...})
+export class DropdownComponent implements OnInit {
+
+  constructor(public zone: NgZone) {}
+
+
+  resetFilter(searchInput: any) {
+    this.zone.runOutsideAngular(() => {
+      setTimeout(() => {
+        searchInput.value = '';
+      }, 100);
+    });
+  }
+
+}
+
+```
+
