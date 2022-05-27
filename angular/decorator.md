@@ -90,3 +90,26 @@ export function simpleDecorator(args) {
 }
 ```
 
+Now if we try to add new property `value1` to class, it will throw error `Cannot assign to read only property 'value1' of object` because we set `writable: false`
+
+```
+@simpleDecorator({
+  value1: 10,
+  value2: 20,
+})
+@Component({
+ ...
+})
+export class NaskiComponent implements OnInit {
+
+  value2 = 1555; // <--- This will throw error
+  constructor() { }
+
+  ngOnInit() {
+    console.log((this as any).value1);
+    console.log((this as any).value2);
+    console.log((this as any).test);
+  }
+
+}
+```
