@@ -198,6 +198,66 @@ export class EditPostComponent implements OnInit {
 }
 ```
 
+### ngModel
+One way data binding using `ngModel` and `ngModelChange`
+```
+<input type="text" [ngModel]="value" (ngModelChange)="setValue($event)">
+<p>
+  Value is {{ value }}
+</p>
+```
+component.ts
+```
+export class MainComponent implements OnInit {
+  value = "hello";
+  
+  setValue($event) {
+    console.log($event)
+    this.value = $event
+  }
+
+}
+```
+
+- ngModelChange with delay
+```
+import { Component, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
+
+@Component({
+  selector: 'app-main',
+  templateUrl: './main.component.html',
+  styleUrls: ['./main.component.scss']
+})
+export class MainComponent implements OnInit {
+  value = "hello";
+  valueChanged$ = new Subject<string>();
+  constructor() { }
+
+  ngOnInit() {
+    // listening changes
+    this.valueChanged$
+    .pipe(
+      debounceTime(500),
+      distinctUntilChanged()
+      )
+    .subscribe(val => {
+      console.log('valueChanged ', val);
+      // update ngModel value
+      this.value = val
+    })
+  }
+
+  setValue($event) {
+    // emit event on input value change
+    this.valueChanged$.next($event);
+  }
+
+}
+
+```
+
 ### ng-container
 ```
 <ng-container *ngIf="!(isAuthenticated$ | async); else logout">
