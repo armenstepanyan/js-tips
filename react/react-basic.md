@@ -1,3 +1,57 @@
+### Virtual DOM
+Virtual DOM is a “virtual” representation of a UI which is kept 
+in memory and synced with the “real” DOM by a library such as ReactDOM.
+This process is called reconciliation. **Reconciliation** is the process through which React updates the Browser DOM.
+
+Important concepts behind the working of the Reconciliation process are:
+
+- Virtual DOM  
+- Diffing Algorithm
+
+React renders JSX components to the Browser DOM, but keeps a copy of the actual DOM to itself.
+The following actions take place in React:
+
+- React stores a copy of Browser DOM which is called Virtual DOM.
+- When we make changes or add data, React creates a new Virtual DOM and compares it with the previous one
+- Comparison is done by **Diffing Algorithm**. Note:  These comparisons take place in the memory and nothing is yet changed in the Browser
+- After comparing, React goes ahead and creates a new Virtual DOM having the changes
+- Then it updates the Browser DOM with the least number of changes possible without rendering the entire DOM again
+
+### How does this Virtual DOM compare itself to its previous version?
+This is where the **Diffing Algorithm** comes into play. When diffing two trees, React first compares the two root elements. 
+The behavior is different depending on the types of the root elements. Some concepts used by this Algorithm are:
+
+- Two elements of different types will produce different trees.
+- **Breadth-First Search** (BFS) is applied because if a node is found as changed, it will re-render the entire subtree hence Depth First Approach is not exactly optimal.
+- When comparing two elements of the same type, keep the underlying node as same and only update changes in **attributes** or **styles**.
+- React uses optimizations so that a minimal difference can be calculated in O(N) efficiently using this Algorithm
+
+
+### Depth-first
+With DFS of non-tree graphs, just like with trees, we follow a single line of child nodes until we hit a childless node. (go depth until find latest child)
+When we traverse down a path of children, we add them to the stack as we go along. Once we reach a node with no accessible children, we follow our path backwards until we find a node that has another path extending off of it
+
+### Breadth-first
+In breadth-first searches, we go broad first. This means that after we examine our first node, we examine all of its immediately neighboring nodes before we go any deeper.
+
+### DFS vs BFS
+In general, BFS is best for short searches.
+DFS is good, then, if you're interested in checking out all possible paths from one point to another
+
+Basically, use DFS if you want to exhaust all possible options, and use BFS if you want to find something as quickly as possible!
+
+
+### What is “React Fiber”?
+Fiber is the new reconciliation engine in React 16. Its main goal is to enable incremental rendering of the virtual DOM. 
+The primary goal of Fiber is to enable React to take advantage of scheduling (the process of determining when work should be performed)
+Specifically, we need to be able to
+- pause work and come back to it later.
+- assign priority to different types of work.
+- reuse previously completed work.
+- abort work if it's no longer needed.
+
+
+
 ### Create new app
 ```
 npx create-react-app my-app
