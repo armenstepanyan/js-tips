@@ -179,11 +179,34 @@ If any of the promises is rejected, the promise returned by Promise.all immediat
 ```
 Promise.all([
   new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
-  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 2000)),
+  new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 500)),
   new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
 ]).catch(alert);
 ```
-After 2 second will catch error `Error!`. In case of an error, other promises are ignored. If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored. `Promise.all` does nothing to cancel them, as there’s no concept of 'cancellation' in promises
+After 0.5 second will catch error `Error!`. In case of an error, other promises are ignored. **Note** this does not mean that fetch requests for example will be cancelled.
+If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored. `Promise.all` does nothing to cancel them, as there’s no concept of 'cancellation' in promises
+
+**Note** The setTimeout will still works after Promise catch error. The thing is its never goes to `then()` block of `Promise.all(...)`
+
+To handle error and continue Promise chain work need to add `catch` to promise and return error.
+
+```
+var p = Promise.all([
+  Promise.resolve(1),
+  Promise.resolve(2),
+  Promise.reject("Error").catch(e => e), // catch error here
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve('async')
+    }, 1500)
+  })
+]).then(data => {
+// [1, 2, "Error", "async"]
+  console.log(data)
+}).catch(err => console.log(err))
+
+```
+
 
 ## Promise.allSettled
 Promise.all rejects as a whole if any promise rejects. That’s good for 'all or nothing' cases, when we need all results successful to proceed. Promise.allSettled just waits for all promises to settle, regardless of the result. The resulting array has:
