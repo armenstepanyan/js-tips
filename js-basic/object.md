@@ -78,4 +78,57 @@ The result will return `true`
 console.log(id1 === id2) // true
 ```
 
+### Object.defineProperty
+The JavaScript Object.defineProperty() method adds or modifies existing property on an object and returns the object.
+Syntax
+```
+Object.defineProperty(obj, prop, descriptor)
+```
+Property descriptors present in objects come in two ways: **data descriptors** and **accessor descriptors**. 
+A data descriptor is a property that has a value, which may or may not be writable. An accessor descriptor is a property described by a getter-setter pair of functions. A descriptor must be one of these two flavors; it cannot be both.
 
+- configurable 
+when this is set to `false` the type of this property cannot be changed between data property and accessor property, the property may not be deleted
+Defaults: `false`
+
+- enumerable
+if `true` property will be shown in `for..in` and `Object.keys()`. Defualt: `false`
+
+- writable
+`true` value can be changed. Defualt: `false`
+
+- value
+The value associated with the property. Can be any valid JavaScript value (number, object, function, etc). Defaults to `undefined`
+
+```
+// simple defination
+var user = {};
+user.name = 'John'
+
+// same with descriptor
+Object.defineProperty(user, "name", { 
+  value: "John", 
+  configurable: true, // can be deleted
+  writable: true,    // value can be change
+  enumerable: true   // will be displayed in for..in 
+}
+);
+
+user.name = "Bob"; // {name: 'Bob'}
+delete user.name // {}
+
+```
+
+To make property as constant use `writable` and `configurable`
+```
+var user = {};
+Object.defineProperty(user, "name", { 
+  value: "John", 
+  configurable: false, // disallow "delete user.name"
+  writable: false,    // cannot change, disallow "user.name="
+}
+);
+
+user.name = 'Bob'; // {name: 'John'} <-- unchanged
+```
+In strict mode `user.name = '...'` will trhow an error. (Cannot assign to read only property 'name' of object)
