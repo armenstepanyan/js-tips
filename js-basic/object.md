@@ -1,3 +1,4 @@
+### valueOf
 The **valueOf()** method returns the primitive value of the specified object.
 
 ```
@@ -43,6 +44,16 @@ console.log(`${obj2}`); // "hello"   -- hint is "string"
 console.log(obj2 + ''); // "true"    -- hint is "default"
 ```
 
+Test
+```
+Object.keys(obj) // []
+Object.values(obj) // []
+Object.getOwnPropertySymbols(obj) // [Symbol(Symbol.toPrimitive)]
+Object.getOwnPropertyDescriptors(obj) //  { Symbol(Symbol.toPrimitive): {writable: true, enumerable: true, configurable: true, value: ƒ} }
+
+```
+
+
 ### Symbol
 ```
 var sym1 = Symbol();
@@ -77,6 +88,73 @@ The result will return `true`
 ```
 console.log(id1 === id2) // true
 ```
+
+### Object.create()
+The `Object.create()` method creates a new object, using an existing object as the prototype of the newly created object.
+Syntax
+```
+Object.create(proto)
+Object.create(proto, propertiesObject)
+```
+`proto` - The object which should be the prototype of the newly-created object. The `proto` parameter has to be either
+**null** or an **Object** excluding primitive wrapper objects (example: new String)
+```
+const obj = {
+  log: function(){
+    console.log(`Name is ${this.name}`)
+  }
+}
+
+var foo = Object.create(obj);
+foo.name = "John";
+foo.log()  // Name is John
+```
+foo.log function comes from obj.log. So if we delete `delete obj.log` - `foo.log` will trow an error
+```
+console.log(foo)
+{ 
+  name: 'John'
+  [[Prototype]]: Object
+      log: f() // refers to obj.log
+      [[Prototype]]: Object
+}
+```
+Same example with `__proto__`
+```
+var o = {
+  log: function(){
+    console.log(this.name)
+  }
+}
+
+var foo = {name: 'John'}
+{ 
+  name: 'John'
+  [[Prototype]]: Object
+}
+
+foo.__proto__ = o;
+// foo
+{ 
+  name: 'John'
+  [[Prototype]]: Object
+      log: f() // refers to obj.log
+      [[Prototype]]: Object
+}
+
+foo.log() // John
+
+```
+
+### Object with null prototype
+```
+const nullProtoObj = Object.create(null);
+console.log(nullProtoObj) // {} empty object - no prototype
+
+o.toString() // Uncaught TypeError: o.toString is not a function
+console.log("nullProtoObj is: " + nullProtoObj) // Uncaught TypeError: Cannot convert object to primitive value
+```
+
 
 ### Object.defineProperty
 The JavaScript Object.defineProperty() method adds or modifies existing property on an object and returns the object.
