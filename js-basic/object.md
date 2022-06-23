@@ -109,7 +109,7 @@ var foo = Object.create(obj);
 foo.name = "John";
 foo.log()  // Name is John
 ```
-foo.log function comes from obj.log. So if we delete `delete obj.log` - `foo.log` will trow an error
+foo.log function comes from obj.log. So if we delete `delete obj.log` - `foo.log` will throw an error
 ```
 console.log(foo)
 { 
@@ -153,6 +153,22 @@ console.log(nullProtoObj) // {} empty object - no prototype
 
 o.toString() // Uncaught TypeError: o.toString is not a function
 console.log("nullProtoObj is: " + nullProtoObj) // Uncaught TypeError: Cannot convert object to primitive value
+```
+
+Define `toString` for `Object.create(null)`
+```
+let obj = Object.create(null, {
+  toString: { 
+    value() { 
+      return Object.values(this).join();
+    },
+    enumerable: false // do not display toString in for..in, Object.keys, Object.values
+  }
+});
+
+obj.a = 1;
+obj.b= 2;
+console.log(dictionary.toString()) // 1,2
 ```
 
 
@@ -209,4 +225,4 @@ Object.defineProperty(user, "name", {
 
 user.name = 'Bob'; // {name: 'John'} <-- unchanged
 ```
-In strict mode `user.name = '...'` will trhow an error. (Cannot assign to read only property 'name' of object)
+In strict mode `user.name = '...'` will throw an error. (Cannot assign to read only property 'name' of object)
