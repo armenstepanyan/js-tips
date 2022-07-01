@@ -311,6 +311,23 @@ export class Form extends Component {
 export default Form
 ```
 
+Function component
+```
+import React, { useState } from 'react';
+
+
+export default function Form() {
+
+  const [name, setName] = useState("");
+  return (
+    <div>
+      <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
+      <p>{name}</p>
+    </div>
+  );
+}
+```
+
 ### Counter example
 With function using `useState`
 ```
