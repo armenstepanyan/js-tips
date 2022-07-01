@@ -99,3 +99,53 @@ function slowFunction(number) {
 ```
 [Stackblitz](https://stackblitz.com/edit/react-aag4db?devtoolsheight=33&file=src/MemoComp.js)
 
+### Example 2
+This component will be rendered each time when state is changed. And each time when we click on button to change style.background `const len = getTextLength(name)` will called again. We need to call `getTextLength` function only if `name` is changed.  
+```
+import React, { useState } from 'react';
+
+function getTextLength(s: string) {
+  console.log('func called');
+  return s.length;
+}
+
+export default function Form() {
+  console.log('component rendered');
+  const [name, setName] = useState('');
+  const [isGreen, setIsGreen] = useState(false);
+  const len = getTextLength(name); // <-- called each time when state is changed
+
+  return (
+    <div>
+      <input
+        type="text"
+        value={name}
+        onChange={(e) => setName(e.target.value)}
+      />
+      <p style={{ backgroundColor: !isGreen ? 'green' : 'blue' }}>{name}</p>
+      <p>Text length is {len}</p>
+      <button onClick={() => setIsGreen((prev) => !prev)}>Change color</button>
+    </div>
+  );
+}
+```
+
+Using useMemo
+```
+export default function Form() {
+  console.log('component rendered');
+  const [name, setName] = useState('');
+  const [isGreen, setIsGreen] = useState(false);
+  const len = useMemo(() => {
+    return getTextLength(name)
+  }, [name]) // <-- function will be called only if name is changed
+
+  return (
+    <div>
+      ...
+    </div>
+  );
+}
+```
+
+[Example](https://stackblitz.com/edit/a-react-usememo2?file=Form.tsx)
