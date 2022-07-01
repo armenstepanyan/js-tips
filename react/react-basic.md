@@ -223,6 +223,11 @@ function StyleSheet() {
 }
 ```
 
+#### Inline style
+```
+<p style={{ backgroundColor: !isActive ? 'green' : 'gray' }}>{name}</p>
+```
+
 Component scoped styles. Create `css` file with `{name}.module.css` pattern
 
 **appStyle.module.css**
