@@ -126,3 +126,70 @@ test();
 The if block is evaluated because the outer var foo has a value. 
 However due to lexical scoping this value is not available inside the block: the identifier foo inside the if block is the let foo. 
 The expression `(foo + 55)` throws a ReferenceError because initialization of `let foo` has not completed — it is still in the temporal dead zone.
+
+### Arrow functions
+- has no own this
+
+```
+let group = {
+  title: "Our Group",
+  students: ["John", "Pete", "Alice"],
+
+  showList() {
+    this.students.forEach(
+      student => console.log(this.title + ': ' + student) // this refers to `group`
+    );
+  },
+  showList2() {
+    this.students.forEach(function(student) {
+     
+      console.log(this) // this refers to window, not to group object
+    });
+  }
+  
+};
+```
+
+- has no `arguments`
+```
+const log = () => {
+  console.log(arguments) // Uncaught ReferenceError: arguments is not defined
+}
+```
+
+This can be useful when we need to create defered function
+```
+function defer(f, ms) {
+  return function() {
+    setTimeout(() => f.apply(this, arguments), ms)
+  };
+}
+
+function sayHi(who) {
+  alert('Hello, ' + who);
+}
+
+let sayHiDeferred = defer(sayHi, 2000);
+sayHiDeferred("John");  // Hello, John after 2 seconds
+```
+
+Same example without arrow function
+```
+function defer(f, ms) {
+  return function(...args) { // <--- keep arg here
+    let ctx = this; // <-- keep context
+    setTimeout(function() {
+      return f.apply(ctx, args);
+    }, ms);
+  };
+}
+```
+
+- cannot be called with `new` keyword
+```
+var log = () => {
+  console.log('works')
+}
+
+var d = new log(); // Uncaught TypeError: log is not a constructor
+```
