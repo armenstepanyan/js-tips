@@ -193,3 +193,35 @@ var log = () => {
 
 var d = new log(); // Uncaught TypeError: log is not a constructor
 ```
+
+### Call/apply/bind
+The main concept behind all this methods is **Function burrowing**. 
+Function borrowing allows us to use the methods of one object on a different object without having to make a copy of that method and maintain it in two separate places.
+- **Call** invokes the function immediately and allows you to pass in arguments one by one
+- **Apply** invokes the function immediately and allows you to pass in arguments as an array.
+- **Bind** returns a new function, and you can invoke/call it anytime you want by invoking a function.
+
+**call** attaches **this** into function and executes the function immediately:
+```
+var person = {  
+  name: "James Smith",
+  hello: function(thing) {
+    console.log(this.name + " says hello " + thing);
+  }
+}
+
+person.hello("world");  // output: "James Smith says hello world"
+person.hello.call({ name: 'John Doe' }, 'world') // output: "John Doe says hello world"
+```
+Same example with **apply**
+```
+person.hello.apply({ name: 'John Doe' }, ['world'])
+```
+**bind** attaches **this** into function and it needs to be invoked separately:
+```
+person.hello("world");  // output: "James Smith says hello world"
+var helloFunc = person.hello.bind({ name: "John Doe" });
+helloFunc("world");  // output: John Doe says hello world"
+```
+In simple words, bind creates the function, call and apply executes the function.
+
