@@ -276,6 +276,51 @@ export class MainComponent implements OnInit {
 </ng-template>
 ```
 
+### Input
+We can listens `Input()` data changes in 2 ways:
+- ngOnChanges hook
+```
+export class MyInputComponent implements OnInit, OnChanges {
+
+@Input() data!: number;
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+  }
+}
+```
+Output
+```
+{
+  data: {
+    currentValue: 2
+    firstChange: false
+    previousValue: 1
+  },
+  ...
+ anotherProperty: {...}
+}
+```
+- Using setter
+```
+export class MyInputComponent implements OnInit, OnChanges {
+
+  _data!: number;
+  get data(): number {
+    return this._data;
+  }
+  @Input() set data(value: number) {
+    console.log(value); // <-- changes here
+    this._data = value;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes); // note: we can still listen changes here
+  }
+
+}
+
+```
+
 ### zone.runOutsideAngular
 In case if we using setTimeout to change dom element behavior (size, value ...) we need to wrap it in `zone.runOutsideAngular` to skip changeDetection cycle
 
