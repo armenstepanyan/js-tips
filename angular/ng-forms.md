@@ -252,3 +252,36 @@ export class AppComponent {
 }
 ```
 [Example](https://stackblitz.com/edit/a-template-form?file=src/app/app.component.html)
+
+### Typed Forms
+As of Angular **14**, reactive forms are strictly typed by default.
+You might wonder: why does the type of this control include null? This is because the control can become null at any time, by calling reset:
+```
+const email = new FormControl('a@gmail.com');
+email.reset();
+console.log(email.value); // null
+```
+TypeScript will enforce that you always handle the possibility that the control has become `null`. If you want to make this control non-nullable, you may use the `nonNullabl`e option. This will cause the control to reset to its **initial** value, instead of null
+```
+const email = new FormControl('a@gmail.com', {nonNullable: true});
+email.setValue('b@gmail.com')
+email.reset();
+console.log(email.value); // a@gmail.com <-- initial value
+```
+
+### FormBuilder and NonNullableFormBuilder
+An additional builder is available: `NonNullableFormBuilder`. This type is shorthand for specifying `{nonNullable: true}` on every control, and can eliminate significant boilerplate from large non-nullable forms
+```
+const fb = new FormBuilder();
+const login = fb.nonNullable.group({
+    email: 'a@gmail.com',
+    password: '123',
+});
+login.setValue({
+    email: 'b@gmail.com',
+    password: '567'
+    });
+
+login.reset();
+console.log(login.value) // {email: 'a@gmail.com', password: '123'}
+```
