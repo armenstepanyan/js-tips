@@ -89,7 +89,7 @@ export class FirstComponent {
 }
 ```
 
-For `OnPush` strategy need to call `markForCheck` function, that explicitly marks the view as changed so that it can be checked again.
+For `OnPush` strategy need to call `markForCheck` function (or `detectChanges`), that explicitly marks the view as changed so that it can be checked again.
 ```
 @Component({
   selector: "app-first",
@@ -106,10 +106,35 @@ export class FirstComponent {
       this.numberOfTicks++;
       // require view to be updated
       this.ref.markForCheck();
+      // or this.ref.detectChanges()
     }, 1000);
   }
 }
 ```
+If we have object in our coponent and we are using `ChangeDetectionStrategy.OnPush` strategy, changing object reference **will not update** the view
+```
+@Component({
+  selector: "app-first",
+  template: `
+    <h3>Number {{ obj.a }}</h3>
+  `,
+  styles: [],
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class FirstComponent {
+
+  obj = {a: 1};
+
+  constructor(private ref: ChangeDetectorRef) {
+    setTimeout(() => {
+    // NOTE: reference is changed but change-detection will not be triggered!
+      this.obj = {a: 56}
+    }, 1000);
+  }
+}
+
+```
+
 [Stackblitz](https://stackblitz.com/edit/angular-change-detector?file=src/app/first.component.ts)
 
 The following example defines a component with a large list of read-only data that is expected to change constantly, many times per second. To improve performance, we want to check and update the list less often than the changes actually occur. To do that, we detach the component's change detector and perform an explicit local check every five seconds. 
