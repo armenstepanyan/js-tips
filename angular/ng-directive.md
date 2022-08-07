@@ -203,3 +203,62 @@ app.component.html
 
 Now on mouse over `font-size` will be '20px', and on leave default - `14px`
 [Example](https://stackblitz.com/edit/a-directive-2)
+
+### Example expand-text directive
+```
+import { Directive, ElementRef, AfterViewInit, Input } from '@angular/core';
+
+@Directive({
+  selector: '[appHeaderExpand]',
+  host: {
+    '(mouseenter)': 'expandText()',
+    '(mouseleave)': 'collapseText()',
+  },
+})
+export class HeaderExpandDirective implements AfterViewInit {
+  initialText = '';
+  textLength = 0;
+  // is no input value was provided - use default
+  @Input() allowedTextLength = 64;
+  constructor(private element: ElementRef) {}
+
+  ngAfterViewInit() {
+    this.initialText = this.element.nativeElement.innerText;
+    this.textLength = (this.element.nativeElement.innerText || '').length;
+    const neddToExpand = this.textLength < this.allowedTextLength;
+    this.toggleText(neddToExpand);
+  }
+
+  private toggleText(needExpand: boolean) {
+    if (this.textLength <= this.allowedTextLength) {
+      return;
+    }
+
+    this.element.nativeElement.innerText = needExpand
+      ? this.initialText
+      : this.initialText.substr(0, this.allowedTextLength) + '...';
+  }
+
+  expandText() {
+    this.toggleText(true);
+  }
+  collapseText() {
+    this.toggleText(false);
+  }
+}
+```
+Usage
+```
+<p appHeaderExpand [allowedTextLength]="20">
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur nihil,
+  molestias obcaecati doloribus ducimus enim numquam ab dolores necessitatibus
+  itaque.
+</p>
+
+<p appHeaderExpand>
+  Lorem ipsum dolor sit amet consectetur adipisicing elit. Officia a eligendi ab
+  accusamus aperiam veniam nobis libero similique, praesentium voluptatem nemo
+  dolorum? Delectus nesciunt esse numquam, temporibus 
+</p>
+```
+[Stackblitz example](https://stackblitz.com/edit/a-angular-expand-directive?file=src/app/header-expand.directive.ts)
