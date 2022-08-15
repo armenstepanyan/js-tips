@@ -225,3 +225,64 @@ helloFunc("world");  // output: John Doe says hello world"
 ```
 In simple words, bind creates the function, call and apply executes the function.
 
+### Function declaration vs. Function expression
+Differences
+- Hoisting:
+
+Function declarations are similar to `var` they will be automatically hoisted, whereas function expressions will not be hoisted.
+
+- Callback:
+
+If a callback is a `function declaration`, it will be available in the global scope, which is not necessary most of the time.
+If a callback is a `function expression`, it will not be available outside of the function that uses it.
+
+- IIFE:
+
+An Immediately-invoked Function Expression **(IIFE)** is a way to execute functions immediately, as soon as they are created.
+As the name suggests, IIFEs can be created using function expression.
+
+Another  difference between a function expression and a function declaration is the **function name**, which can be omitted in function expressions to create anonymous functions.
+ The variable to which the function expression is assigned will have a `name` property. The name doesn't change if it's assigned to a different variable. 
+ If function name is omitted, it will be the variable name (implicit name).  If function name is present, it will be the function name (explicit name).
+  ```
+const foo = function () {};
+foo.name // "foo"
+
+const foo2 = foo;
+foo2.name // "foo"
+
+foo2.name = "another name";
+foo2.name // foo, name is unchangeable
+ ```
+ With named function
+ ```
+const bar = function baz() {};
+bar.name // "baz"
+
+console.log(foo === foo2); // true
+console.log(typeof baz); // undefined
+console.log(bar === baz); // false (errors because baz == undefined)
+ ```
+ 
+ ### AsyncFunction
+ In JavaScript, every asynchronous function is actually an `AsyncFunction` object.
+ ```
+ async function a(){
+    return await 1;
+}
+a.constructor.name // AsyncFunction
+ ```
+ Create function using `AsyncFunction` constructor
+ ```
+ const AsyncFunction = (async function () {}).constructor;
+ const fn = new AsyncFunction(
+  'a',
+  'b',
+  'return await Promise.resolve(a) + await Promise.resolve(b);',
+);
+ 
+ fn(10, 20).then((v) => {
+  console.log(v); // prints 30
+});
+ ```
+ 
