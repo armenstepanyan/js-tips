@@ -285,4 +285,10 @@ a.constructor.name // AsyncFunction
   console.log(v); // prints 30
 });
  ```
- 
+
+### Map vs WeakMap
+- A **WeakMap** accepts only objects as keys whereas a **Map**,in addition to objects, accepts primitive datatype such as strings, numbers
+- WeakMap objects doesn't avert garbage collection if there are no references to the object which is acting like a key. Therefore there is no method to retrieve keys in WeakMap, whereas in Map there are methods such as Map.prototype.keys() to get the keys.
+- There is no **size** property exists in WeakMap
+- WeakMap is not iterable, there is no functions like keys(), entries(), values()
+- No **clear()** function
