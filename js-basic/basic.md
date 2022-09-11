@@ -81,6 +81,15 @@ switch(x) {
 }
 
 ```
+**Note:** Just like `const` the `let` does not create properties of the `window` object when declared globally (in the top-most scope).
+```
+var a = 15;
+window.a // 15
+
+let b = 16
+window.b // undefined
+```
+
 ### Temporal dead zone (TDZ)
 A let or const variable is said to be in a "temporal dead zone" (TDZ) from the start of the block until code execution reaches the line where the variable is declared.
 
