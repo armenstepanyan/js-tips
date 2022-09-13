@@ -102,6 +102,40 @@ A Subscription has one important method, **unsubscribe**, that takes no argument
 An RxJS **Subject** is a special type of Observable that allows values to be multicasted to many Observers. 
 While plain Observables are **unicast** (each subscribed Observer owns an independent execution of the Observable), Subjects are **multicast**.
 
+**Observable**
+```
+import { Observable } from 'rxjs';
+
+let obs = Observable.create(observer=>{
+   observer.next(Math.random());
+})
+
+obs.subscribe(res=>{
+  console.log('subscription a :', res); //subscription a :0.2859800202682865
+});
+
+obs.subscribe(res=>{
+  console.log('subscription b :', res); //subscription b :0.694302021731573
+});
+```
+
+**Subject**
+```
+import {Subject} from 'rxjs';
+
+let obs = new Subject();
+
+obs.subscribe(res=>{
+  console.log('subscription a :', res); // subscription a : 0.91767565496093
+});
+
+obs.subscribe(res=>{
+  console.log('subscription b :', res);// subscription b : 0.91767565496093
+});
+
+obs.next(Math.random());
+```
+
 ### BehaviorSubject
 One of the variants of Subjects is the BehaviorSubject, which has a notion of `the current value`. 
 It stores the latest value emitted to its consumers, and whenever a new Observer subscribes, 
