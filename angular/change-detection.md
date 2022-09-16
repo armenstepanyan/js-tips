@@ -223,3 +223,11 @@ There are two types of change detection:
 
 - Default change detection: Angular decides if the view needs to be updated by comparing all the template expression values before and after the occurrence of an event, for all components of the component tree
 - OnPush change detection: this works by detecting if some new data has been explicitly pushed into the component, either via a component input or an Observable subscribed to using the async pipe
+
+**OnPush will triger change detection if:**
+- Input data is object/array and value is changed by reference
+- Input data is primitive value and value was changed
+- Angular event was fired.  `(click)="onClickHandle()"`
+- Manual trigering: `this.ref.detectChanges()`
+
+
