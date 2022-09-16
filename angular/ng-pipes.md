@@ -71,4 +71,18 @@ Usage
 ```
 <div [innerHtml]="message | safeHtml"></div>
 ```
+### Pure
+By default pipes as pure (pure=true). For primitive types it will works on data change and for object types only if reference is changed.
+```
+@Pipe({
+  name: 'join',
+  pure: false, // triger change on adding new value
+})
+export class JoinPipe implements PipeTransform {
+  transform(values: Array<number>): string {
+    return values.join('-');
+  }
+}
+```
+[Stackblitz](https://stackblitz.com/edit/angular-ivy-k8k7yp?file=src/app/join.pipe.ts)
 
