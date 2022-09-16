@@ -227,6 +227,7 @@ There are two types of change detection:
 **OnPush will triger change detection if:**
 - Input data is object/array and value is changed by reference
 - Input data is primitive value and value was changed
+- Observable was subscribed using the `async` pipe
 - Angular event was fired.  `(click)="onClickHandle()"`
 - Manual trigering: `this.ref.detectChanges()`
 
