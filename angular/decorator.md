@@ -100,7 +100,7 @@ Now if we try to add new property `value1` to class, it will throw error `Cannot
 @Component({
  ...
 })
-export class NaskiComponent implements OnInit {
+export class MainComponent implements OnInit {
 
   value2 = 1555; // <--- This will throw error
   constructor() { }
@@ -148,7 +148,7 @@ export function autoDestroy(args?: InputData) {
 ```
 
 Usage
-```
+```typescript
 @autoDestroy({
   list: ['destroy$', 'interval$', 'request$'],
 })
