@@ -113,3 +113,66 @@ export class NaskiComponent implements OnInit {
 
 }
 ```
+
+### AutoDestroy decorator
+This decorator will unsubscribe observables and complete subject on destroy. By default decorator will complete all subjects and observables or we can provide list.
+```typescript
+export function autoDestroy(args?: InputData) {
+  const list = args?.list || [];
+
+  return function (target: any) {
+    const originalDestroy = target.prototype.ngOnDestroy;
+    target.prototype.ngOnDestroy = function () {
+      const props = list.length > 0 ? list : Object.keys(this);
+       props.forEach((prop) => {
+        if (prop) {
+        // if Subject
+          if (typeof this[prop].complete === 'function') {
+            this[prop].next(true);
+            this[prop].complete();
+          }
+          // Observable. e.g. http request
+          if (typeof this[prop].unsubscribe === 'function') {
+            this[prop].unsubscribe();
+          }
+        }
+      });
+
+      originalDestroy &&
+        typeof originalDestroy === 'function' &&
+        originalDestroy.apply(this, arguments);
+    };
+  };
+}
+
+```
+
+Usage
+```
+@autoDestroy({
+  list: ['destroy$', 'interval$', 'request$'],
+})
+@Component({
+  selector: 'app-list',
+  templateUrl: './list.component.html',
+})
+export class ListComponent implements OnInit {
+  destroy$ = new Subject<boolean>();
+  interval$: any;
+  request$: any;
+
+  constructor(private http: HttpClient) {}
+
+  ngOnInit(): void {
+    this.request$ = this.http
+      .get('https://jsonplaceholder.typicode.com/todos')
+      .subscribe();
+
+    interval(500).pipe(takeUntil(this.destroy$)).subscribe(console.log);
+
+    this.interval$ = interval(700).subscribe(console.log);
+  }
+}
+```
+
+[Stackblitz](https://stackblitz.com/edit/angular-auto-destroy-decorator?devToolsHeight=33&file=src/app/list/list.component.ts)
