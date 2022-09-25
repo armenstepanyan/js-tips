@@ -102,6 +102,14 @@
 </div>
 ```
 
+### ngStyle
+```
+<div [ngStyle]="{'opacity': disabled ? '0.5' : '1'}"></div>
+<p [ngStyle]="{'font-size':'14px', 'font-family':'Segoe Print'}">
+  Text
+</p>
+```
+
 ### async pipe
 
 ```
