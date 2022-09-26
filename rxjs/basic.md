@@ -273,4 +273,64 @@ subject.complete();
 ### Hot and Cold observables
 There are two types of observables: hot and cold. The main difference is that a cold observable creates a data producer for each subscriber,
  whereas a hot observable creates a data producer first, and each subscriber gets the data from one producer, starting from the moment of subscription.
+ 
+Cold Observables start to emit values only when we subscribe to them. Hot ones emit always.
 
+Cold Observables are unicast, and Hot Observables are multicast (share value between multiple subscribes).
+
+```typescript
+// create cold Observable
+const obs$ = of(null).pipe(map(() => Math.random()));
+obs$.subscribe(console.log);  // 0.2689673282776057
+obs$.subscribe(console.log);  // 0.441590956365129
+obs$.subscribe(console.log);  // 0.9868565543832466
+```
+Now `Math.random()` will be executed for all subscribers separately.
+
+```typescript
+const fromTimestamp = (): Observable<number> => {
+  return new Observable((subscriber) => {
+    // Cold Observable: each subscriber will receive diferent value
+    const timeStamp = Date.now();
+    subscriber.next(timeStamp)
+  })
+}
+
+const obs$ = fromTimestamp();
+obs$.subscribe({
+  next: (value) => console.log(value)
+})
+```
+To make it hot we need to move `timeStamp` to up outside Observable 
+```typescript
+const fromTimestamp = (): Observable<number> => {
+ // Now it's Hot
+  const timeStamp = Date.now();
+  return new Observable((subscriber) => {    
+    subscriber.next(timeStamp)
+  })
+}
+```
+For Hot Observables Data Source is created and activated outside of Observable. For Cold ones - inside
+
+### Make Cold Observable Hot
+This can be useful for http requests. In case if we are using same observable request in many places we can share data.
+```typescript
+this.posts$ = this.http.get<any>(url);
+```
+View
+```html
+
+<div>
+  Count: {{ (posts$ | async)?.length }}
+</div>
+
+<ul>
+  <li *ngFor="lef post of posts$ | async">{{ post.title }}</li>
+</ul>
+```
+
+Now the request will be sent 2 times. To fix this we can share data with `shareReplay()` operator
+```typescript
+this.posts$ = this.http.get<any>(url).pipe(shareReplay());
+```
