@@ -51,10 +51,23 @@ export class CustomCheckboxComponent implements OnInit, ControlValueAccessor {
 
 }
 ```
+View
+```html
+<p>
+  <button
+  (click)="setValue()"
+  [disabled]="disabled"
+  [ngClass]="disabled ? 'disabled' : 'active'"
+  >
+  {{ value ? 'Checked' : 'Unchecked' }}
+</button>
+</p>
+
+```
 
 Usage
 
-```
+```html
 <form [formGroup]="submitForm" >
   <input type="text" formControlName="name">
   <app-custom-checkbox 
