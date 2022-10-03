@@ -261,3 +261,44 @@ export class CustomLogService {
 
 }
 ```
+
+## Injection Tokens
+Angular provides a special generic class `InjectionToken<T>` to help you create custom injection tokens backed by specific types: primitives, classes or interfaces. That enables static type checks and prevents many type-related errors at early stages.
+
+tokens.ts
+```typescript
+import { InjectionToken } from '@angular/core';
+export const REST_API_URL = new InjectionToken<string>('rest.api.url');
+```
+Now we can use this token within the main application module to register a URL value that all components and services can use when needed:
+
+```typescript
+import { REST_API_URL } from './tokens';
+
+@NgModule({
+  providers: [
+    // ...,    
+    { provide: REST_API_URL, useValue: 'http://localhost:4200/api' }
+  ]
+})
+```
+
+user.component.ts
+```typescript
+import { REST_API_URL } from '../tokens';
+
+@Component({
+  selector: 'app-user',
+  templateUrl: './user.component.html',
+  styleUrls: ['./user.component.scss']
+})
+export class UserComponent implements OnInit {
+
+  constructor(@Inject(REST_API_URL) apiUrl: string) {
+    // Note: injected value available only inside constructor
+    console.log(apiUrl)
+   }
+
+}
+```
+
