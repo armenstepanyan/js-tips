@@ -1,3 +1,9 @@
+When a component declares a dependency, Angular tries to satisfy that dependency with its own `ElementInjector`. If the component's injector lacks the provider, it passes the request up to its parent component's `ElementInjector`.
+
+The requests keep **forwarding up** until Angular finds an injector that can handle the request or runs out of ancestor `ElementInjector` hierarchies.
+
+If Angular doesn't find the provider in any ElementInjector hierarchies, it goes back to the element where the request originated and looks in the **ModuleInjector** hierarchy. If Angular still doesn't find the provider, it throws an error.
+
 1. If we add service to `providers` array for each componet/directive, service instance should be created for each component
 
 user.component
