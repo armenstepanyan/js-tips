@@ -339,4 +339,33 @@ export class UserComponent {
 }
 ```
 
-**Note** we cannot use `inject` function inside lifecycle hooks (ngOnInit for example).
+**Note** we cannot use `inject` function inside lifecycle hooks (ngOnInit for example). Inject can be helpfull if we have inheritance and we need to call parent `super` function with dependencies.
+```typescript
+class BaseWigdet {
+  constructor(private service1: Service1, pivate service2: Service2) {
+  }
+}
+
+class Child extends Base {
+  construstor() {
+    // here we need to pass required dependencies
+    super(service1, service2)
+  }
+}
+```
+In case if we use `inject` we can keep constructor empty
+```typescript
+class BaseWigdet {
+ service1 = inject(Service1);
+ service2 = inject(Service2);
+  constructor() {}
+}
+
+...
+
+class Child extends Base {
+  construstor() {
+    super()
+  }
+}
+```
