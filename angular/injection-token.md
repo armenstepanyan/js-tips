@@ -302,3 +302,41 @@ export class UserComponent implements OnInit {
 }
 ```
 
+### inject function
+tokens.ts
+```typescript
+import { inject, InjectionToken, PLATFORM_ID } from '@angular/core';
+
+export const WINDOW = new InjectionToken<Window>('global Window', {
+  providedIn: 'root',
+  factory: () => {
+    const platform = inject(PLATFORM_ID);
+    return platform === 'browser' ? window : ({} as Window);
+  }
+})
+```
+
+usage
+```typescript
+import { REST_API_URL, WINDOW } from '../tokens';
+export class UserComponent {
+
+  // inject in constructor
+  constructor(@Inject(WINDOW) private window: Window) {
+    console.log('Window is', window);
+   }
+
+}
+```
+Or using `inject` function
+```typescript
+export class UserComponent {
+
+  window = inject(WINDOW);
+  constructor( ) {
+    console.log('Window is ', this.window);
+   }
+}
+```
+
+**Note** we cannot use `inject` function inside lifecycle hooks (ngOnInit for example).
