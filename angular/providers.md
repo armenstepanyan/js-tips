@@ -4,6 +4,27 @@ The requests keep **forwarding up** until Angular finds an injector that can han
 
 If Angular doesn't find the provider in any ElementInjector hierarchies, it goes back to the element where the request originated and looks in the **ModuleInjector** hierarchy. If Angular still doesn't find the provider, it throws an error.
 
+### Resolution modifiers
+Resolution modifiers fall into three categories:
+- What to do if Angular doesn't find what you're looking for, that is `@Optional()`
+- Where to start looking, that is `@SkipSelf()`
+- Where to stop looking, `@Host()` and `@Self()`
+
+By default, Angular always starts at the current `Injector` and keeps searching all the way up. Modifiers allow you to **change** the starting, or self, location and the ending location.
+
+### @Optional()
+`@Optional()` allows Angular to consider a service you inject to be optional. This way, if it can't be resolved at runtime, Angular resolves the service as `null`, rather than throwing an error. 
+
+### @Self()
+Use `@Self()` so that Angular will only look at the `ElementInjector` for the current component or directive.
+A good use case for @Self() is to inject a service but only if it is available on the current host element. To avoid errors in this situation, combine `@Self()` with `@Optional()`
+
+### SkipSelf()
+Angular starts its search for a service in the parent `ElementInjector`, rather than in the current one.
+
+### @Host
+`@Host()` lets you designate a component as the last stop in the injector tree when searching for providers. Even if there is a service instance further up the tree, Angular won't continue looking 
+
 1. If we add service to `providers` array for each componet/directive, service instance should be created for each component
 
 user.component
