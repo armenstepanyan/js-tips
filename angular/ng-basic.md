@@ -294,7 +294,7 @@ export class MyInputComponent implements OnInit, OnChanges {
 }
 ```
 Output
-```json
+```typescript
 {
   data: {
     currentValue: 2
