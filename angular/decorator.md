@@ -4,7 +4,7 @@ dynamically, without affecting the behavior of other objects from the same class
 An Angular Decorator is a function, using which we attach metadata to a class, method, accessor, 
 property, or parameter. We apply the decorator using the form **@expression**, where expression is the name of the decorator.
 To enable Angular Decorators, we need to add the experimentalDecorators to the `tsconfig.json`
-```
+```json
 {
   "compilerOptions": {
     "target": "ES5",
@@ -14,7 +14,7 @@ To enable Angular Decorators, we need to add the experimentalDecorators to the `
 ```
 
 ### Creating a new Decorator in Angular
-```
+```typescript
 export function simpleDecorator(target: any) {
   console.log('Decorator works');
  
@@ -31,7 +31,7 @@ export function simpleDecorator(target: any) {
 ```
 
 Add new created decorator to component
-```
+```typescript
 import { simpleDecorator } from '../simple-decorator';
 
 @simpleDecorator
@@ -54,7 +54,7 @@ export class MainComponent implements OnInit {
 ```
 
 ### Add arguments
-```
+```typescript
 @simpleDecorator({
   value1: 10,
   value2: 20,
@@ -67,7 +67,7 @@ export class MainComponent implements OnInit {
 ```
 
 simple-decorator.ts
-```
+```typescript
 export function simpleDecorator(args) {
   console.log(args);
 
@@ -92,7 +92,7 @@ export function simpleDecorator(args) {
 
 Now if we try to add new property `value1` to class, it will throw error `Cannot assign to read only property 'value1' of object` because we set `writable: false`
 
-```
+```typescript
 @simpleDecorator({
   value1: 10,
   value2: 20,

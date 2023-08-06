@@ -5,7 +5,7 @@ Inserts an embedded view from a prepared TemplateRef.
 will be available for binding by the local template let declarations. Using the key $implicit in the context object will set its value as default.
 
 
-```
+```typescript
 export class AppComponent {
   menu = [
     {
@@ -24,7 +24,7 @@ export class AppComponent {
 ```
 
 View
-```
+```html
 <div [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="menu[0]"></div>
 <div [ngTemplateOutlet]="templateRef" [ngTemplateOutletContext]="menu[1]"></div>
 
@@ -35,14 +35,14 @@ View
 ```
 
 Or same we can use with `*ngTemplateOutlet`
-```
+```html
 <ng-container *ngTemplateOutlet="templateRef; context: menu[0]"></ng-container>
 <div *ngTemplateOutlet="templateRef; context: menu[1]"></div>
 ```
 
 
 Create wrapper component
-```
+```typescript
 @Component({
   selector: 'menu',
   template: `
@@ -65,7 +65,7 @@ export class MenuComponent {
 By using `ContentChild` we can get template reference to `<ng-template>` inside component
 
 View
-```
+```html
 <menu>
   <ng-template>
     <ul>
@@ -79,7 +79,7 @@ View
 [Stackblitz](https://stackblitz.com/edit/a-ngtemplateoutlet?file=src/app/menu.component.ts)
 
 ### Input Output
-```
+```typescript
 @Component({
   selector: 'app-list',
   template: `   
@@ -111,7 +111,7 @@ export class ListComponent {
 
 View
 
-```
+```html
 <app-list [list]="list" #wrapper (itemAdd)="addNewItem()">
   <ng-template>
     <ul>

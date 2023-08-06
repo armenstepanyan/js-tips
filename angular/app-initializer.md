@@ -1,7 +1,7 @@
 The provided functions are injected at application startup and executed during app initialization. 
 If any of these functions returns a Promise or an Observable, initialization does not complete until the Promise is resolved or the Observable is completed
 
-```
+```typescript
 function initializeApp(): Promise<any> {
   return new Promise((resolve, reject) => {
     // Do some asynchronous stuff
@@ -24,7 +24,7 @@ export class AppModule {}
 
 Provide deps 
 
-```
+```typescript
 import { MyService } from '@app/core/services';
 import { myInitializerFactory } from './my-initializer.factory';
 
@@ -44,7 +44,7 @@ export class AppModule {}
 
 ```
 my-initializer.factory.ts
-```
+```typescript
 import { isPlatformServer } from '@angular/common';
 import { PLATFORM_ID } from '@angular/core';
 
@@ -65,7 +65,7 @@ export function shopifyInitializerFactory(
 ```
 
 my-service.ts
-```
+```typescript
 
 @Injectable({
   providedIn: 'root',

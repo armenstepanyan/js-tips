@@ -4,7 +4,7 @@ This custom validations will automatically run every time when control value mus
 
 Create `letter-validator.ts` that will validate only letters
 
-```
+```typescript
 import { AbstractControl } from "@angular/forms";
 
 export default function LetterValidator(control: AbstractControl): { [key: string]: any } | null {
@@ -15,7 +15,7 @@ export default function LetterValidator(control: AbstractControl): { [key: strin
 ```
 
 App component
-```
+```typescript
 import { Component } from "@angular/core";
 import LetterValidator from "./validators/letter-validator";
 import { FormControl } from "@angular/forms";
@@ -32,7 +32,7 @@ export class AppComponent {
 ```
 
 View
-```
+```html
 <input [formControl]="control" type="text" />
 <div style="color: red" *ngIf="control.hasError('invalidSymbols')">
   Only letters allowed!

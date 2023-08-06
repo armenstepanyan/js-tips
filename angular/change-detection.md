@@ -2,7 +2,7 @@
 The strategy that the default change detector uses to detect changes. When set, takes effect the next time change detection is triggered.
 
 Component
-```
+```typescript
 export class CardOverviewExample {
   list = [
     { id: 1, name: "Data 1", isActive: false },
@@ -24,7 +24,7 @@ export class CardOverviewExample {
 ```
 
 Html 
-```
+```html
 <p>
   Default
 </p>
@@ -37,7 +37,7 @@ Html
 ```
 
 On Push component
-```
+```typescript
 @Component({
   selector: "app-detail-push",
   template: `
@@ -71,7 +71,7 @@ export class DetailOnPushComponent implements OnInit {
 
 ### Default strategy
 In this case view wiil be updated automatically by angular
-```
+```typescript
 @Component({
   selector: "app-first",
   template: `
@@ -90,7 +90,7 @@ export class FirstComponent {
 ```
 
 For `OnPush` strategy need to call `markForCheck` function (or `detectChanges`), that explicitly marks the view as changed so that it can be checked again.
-```
+```typescript
 @Component({
   selector: "app-first",
   template: `
@@ -112,7 +112,7 @@ export class FirstComponent {
 }
 ```
 If we have object in our coponent and we are using `ChangeDetectionStrategy.OnPush` strategy, changing object reference **will not update** the view
-```
+```typescript
 @Component({
   selector: "app-first",
   template: `
@@ -138,7 +138,7 @@ export class FirstComponent {
 [Stackblitz](https://stackblitz.com/edit/angular-change-detector?file=src/app/first.component.ts)
 
 The following example defines a component with a large list of read-only data that is expected to change constantly, many times per second. To improve performance, we want to check and update the list less often than the changes actually occur. To do that, we detach the component's change detector and perform an explicit local check every five seconds. 
-```
+```typescript
 import { Component, ChangeDetectorRef } from "@angular/core";
 
 @Component({
@@ -178,7 +178,7 @@ Without ` ref.detach` the  `get data` getter wil be called on any change (click,
 
 If inside view used `async` pipe, on subsription view will updated.
 
-```
+```typescript
 
 @Component({
   selector: "app-first",
@@ -203,7 +203,7 @@ export class FirstComponent {
 }
 ```
 In this example if we remove `async` from html, view will not updated. For example if subscription made in component it will not update the view.
-```
+```typescript
 // this will not update view
     this.value$.subscribe(v => {
       console.log(v)

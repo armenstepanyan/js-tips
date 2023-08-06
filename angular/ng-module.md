@@ -10,7 +10,7 @@ Create component
 
 
 ### dashboard-routing
-```
+```typescript
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { DashboardComponent } from './dashboard.component';
@@ -36,7 +36,7 @@ export class DashboardRoutingModule { }
 ```
 
 Add dashboard-routing to dashboard.module
-```
+```typescript
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -56,7 +56,7 @@ export class DashboardModule { }
 ```
 
 Then add in main route
-```
+```typescript
   {
     path: 'dashboard',
     loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardModule),
@@ -64,13 +64,13 @@ Then add in main route
   ```
 
 Create subroute relative to dashboard,  dashboard/item1
-```
+```typescript
 { path: 'item1', } // without '/'
 ```
 
 ### Submodule router-outlet
 admin.html
-```
+```html
 <ul>
   <li>
     <a [routerLink]="['/admin', 'user-list']">User list</a>
@@ -83,7 +83,7 @@ admin.html
 ```
 
 admin-routing.ts
-```
+```typescript
 import { AdminComponent } from "@app/admin/admin.component";
 
 const routes: Routes = [
@@ -123,7 +123,7 @@ ng g guards/admin
 ```
 
 src\app\guard\admin.guard.ts
-```
+```typescript
 import { Injectable } from '@angular/core';
 import { CanLoad, Route, UrlSegment, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { Observable } from 'rxjs';
@@ -151,7 +151,7 @@ Create `user.service`
 ng g s service/user
 ```
 
-```
+```typescript
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
@@ -168,7 +168,7 @@ export class UserService {
 
 Create checkbox to toggle isAdmin
 app.component.html
-```
+```html
 <h2>
   Main app
 </h2>
@@ -192,7 +192,7 @@ app.component.html
 ```
 
 app.component.ts
-```
+```typescript
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './service/user.service';
 
@@ -223,7 +223,7 @@ export class AppComponent implements OnInit {
 ```
 
 admin-routing.module.ts
-```
+```typescript
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AdminGuard } from './guard/admin.guard';

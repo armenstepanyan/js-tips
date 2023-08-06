@@ -21,7 +21,7 @@ ng generate directive bold
 
 Will generate this file `src/app/bold.directive.ts` 
 
-```
+```typescript
 import { Directive } from '@angular/core';
 
 @Directive({
@@ -33,7 +33,7 @@ export class BoldDirective {
 ```
 
 Add `bold.directive` to `app.module`
-```
+```typescript
 import { BoldDirective} from './bold.directive';
 .....
 
@@ -54,7 +54,7 @@ Import ElementRef which will give us reference to element
 ```
 
 Now we can use `appBold` directive in `app.component.html`.
-```
+```html
 <p appBold>
   This text will be bold
 </p>
@@ -62,7 +62,7 @@ Now we can use `appBold` directive in `app.component.html`.
 
 To customize element styles we can use `Renderer2` 
 
-```
+```typescript
 import {Directive, ElementRef, Renderer2} from '@angular/core';
  
 @Directive({
@@ -88,7 +88,7 @@ Of course you could reach into the DOM with standard JavaScript and attach event
 - Talking to DOM API directly isn't a best practice.
 
 
-```
+```typescript
 import { HostListener } from '@angular/core';
 .....
 
@@ -112,7 +112,7 @@ Now element will get bold style only on mouse over.
 ### HostBinding
 Decorator that marks a DOM property as a host-binding property and supplies configuration metadata. 
 Angular automatically checks host property bindings during change detection, and if a binding changes it updates the host element of the directive.
-```
+```typescript
 private fontWeight = "normal"; 
 
 @HostBinding("style.fontWeight") get getFontWeight(){
@@ -129,7 +129,7 @@ Now on mouse over on element cursor will be changed to `pointer`.
 And this getter return value `fontWeight` which is changing on mouse over.
 
 Changing element color on init
-```
+```typescript
   @HostBinding("style.color") get getColor() {
     return "red";
   }
@@ -141,7 +141,7 @@ Changing element color on init
 ### Host property
 Instead of using `HostListener` and `HostBinding` decorators to interact with user, we can simply define `host` property in `@Directive` decorator
 
-```
+```typescript
 import {Directive, ElementRef, Renderer2} from '@angular/core';
   
 @Directive({
@@ -171,7 +171,7 @@ export class BoldDirective{
 ```
 
 ### Get input params in directive
-```
+```typescript
 export class BoldDirective {
   @Input() selectedSize = "18px";
   @Input() defaultSize = "16px";
@@ -195,7 +195,7 @@ export class BoldDirective {
 ```
 
 app.component.html
-```
+```html
 <p appBold selectedSize="20px" [defaultSize]="'14px'">
   Start editing to see some magic happen :)
 </p>
@@ -205,7 +205,7 @@ Now on mouse over `font-size` will be '20px', and on leave default - `14px`
 [Example](https://stackblitz.com/edit/a-directive-2)
 
 ### Example expand-text directive
-```
+```typescript
 import { Directive, ElementRef, AfterViewInit, Input } from '@angular/core';
 
 @Directive({
@@ -248,7 +248,7 @@ export class HeaderExpandDirective implements AfterViewInit {
 }
 ```
 Usage
-```
+```html
 <p appHeaderExpand [allowedTextLength]="20">
   Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur nihil,
   molestias obcaecati doloribus ducimus enim numquam ab dolores necessitatibus

@@ -30,7 +30,7 @@ ng generate application admin
 
 ### angular.json
 The `angular.json` contains the configuration settings for the workspace. Here is the shortened version of angular.json for the above code.
-```
+```json
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,

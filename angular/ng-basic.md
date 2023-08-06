@@ -1,6 +1,6 @@
 ### ngFor
 
-```
+```html
 <ul>
   <li *ngFor="let item of list; index as i; trackBy: trackByFn">
     {{ item }} index = {{ i }}
@@ -10,7 +10,7 @@
 [Stackblitz example](https://stackblitz.com/edit/a-ng-basic)
 
 ### ngIf
-```
+```html
 <div *ngIf="condition; then thenBlock else elseBlock"></div>   
 <ng-template #thenBlock>Then template</ng-template>  
 <ng-template #elseBlock>Else template</ng-template> 
@@ -19,7 +19,7 @@
 
 ### ngFor extended version
 
-```
+```html
 <ul>
   <ng-template ngFor let-item [ngForOf]="list" let-i="index" [ngForTrackBy]="trackByFn">
   <li>{{ item }}</li>
@@ -27,7 +27,7 @@
 </ul>
 ```
 
-```
+```typescript
   trackByFn(i, item) {
     // i- index, item - current item
     return i;
@@ -35,7 +35,7 @@
 ```
 
 ### ngSwitch 
-```
+```html
 <select [(ngModel)]="count">
   <option [value]="1">1</option>
   <option [value]="2">2</option>
@@ -53,7 +53,7 @@
 ```
 
 ### ngSwitch with ngTemplateOutlet
-```
+```html
 <ng-container [ngSwitch]="count">  
     <ng-container *ngSwitchCase="10">
         <ng-container *ngTemplateOutlet="multipleSwitch"></ng-container>
@@ -74,7 +74,7 @@
 
 ### ngClass
 
-```
+```html
 <button (click)="activeClass=!activeClass">Toggle class</button>
 
 
@@ -95,7 +95,7 @@
 
 ### Style
 
-```
+```html
 <input type="number" [(ngModel)]="border">
 <div class="d1" [style.borderWidth.px]="border">
   Text
@@ -103,7 +103,7 @@
 ```
 
 ### ngStyle
-```
+```html
 <div [ngStyle]="{'opacity': disabled ? '0.5' : '1'}"></div>
 <p [ngStyle]="{'font-size':'14px', 'font-family':'Segoe Print'}">
   Text
@@ -112,7 +112,7 @@
 
 ### async pipe
 
-```
+```typescript
 import { Subject } from 'rxjs';
 
 export class AppComponent  {
@@ -128,7 +128,7 @@ export class AppComponent  {
 ```
 
 #### html
-```
+```html
  <button (click)="setData()">Set data</button>
   <p>
     {{ data$ | async }}
@@ -137,14 +137,14 @@ export class AppComponent  {
 
 ### Use emitEvent: false
 lets assume we have form and on form field value change we send save request
-```
+```typescript
 this.submitForm = this.fb.group({
     title: [''],
     description: [''],
 })
 ```
 Create subscrition on form value change
-```
+```typescript
 this.submitForm
     .valueChanges
     .pipe(debounceTime(500))
@@ -154,7 +154,7 @@ this.submitForm
 ```
 Now if we set form value with `this.submitForm.setValue({ ... })` it will trigger `this.submitForm.valueChanges` subscription again. To avoid this behavior need to pass `{emitEvent: false}` as argument
 
-```
+```typescript
 this.myService
     .loadSettings()
     .pipe(takeUntil(this.destroy$))
@@ -164,17 +164,14 @@ this.myService
                 description: resp.description
             },
             // skip emit on valueChanges subscriber
-            {
-                emitEvent: false,
-                onlySelf: true
-            },
+            { emitEvent: false, onlySelf: true },
         )
     });
 ```
 
 ### Get query params
 Listen query params change and make request to get single post by id
-```
+```typescript
 import {  ActivatedRoute,  Router } from '@angular/router';
 import { switchMap, takeUntil } from 'rxjs/operators';
 
@@ -228,7 +225,7 @@ export class MainComponent implements OnInit {
 ```
 
 - ngModelChange with delay
-```
+```typescript
 import { Component, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators'
@@ -267,7 +264,7 @@ export class MainComponent implements OnInit {
 ```
 
 ### ng-container
-```
+```html
 <ng-container *ngIf="!(isAuthenticated$ | async); else logout">
   <li class="nav-item">
     <a class="nav-link" href="#" [routerLink]="['/auth']">Login</a>
@@ -287,7 +284,7 @@ export class MainComponent implements OnInit {
 ### Input
 We can listens `Input()` data changes in 2 ways:
 - ngOnChanges hook
-```
+```typescript
 export class MyInputComponent implements OnInit, OnChanges {
 
 @Input() data!: number;
@@ -297,7 +294,7 @@ export class MyInputComponent implements OnInit, OnChanges {
 }
 ```
 Output
-```
+```json
 {
   data: {
     currentValue: 2
@@ -309,7 +306,7 @@ Output
 }
 ```
 - Using setter
-```
+```typescript
 export class MyInputComponent implements OnInit, OnChanges {
 
   _data!: number;
@@ -332,11 +329,11 @@ export class MyInputComponent implements OnInit, OnChanges {
 ### zone.runOutsideAngular
 In case if we using setTimeout to change dom element behavior (size, value ...) we need to wrap it in `zone.runOutsideAngular` to skip changeDetection cycle
 
-```
+```html
 <input #searchInput (blur)="resetFilter(searchInput)" />
 ```
 component
-```
+```typescript
 import { Component, OnInit, NgZone } from '@angular/core';
 
 @Component({...})

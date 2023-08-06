@@ -1,4 +1,4 @@
-```
+```typescript
 import { HttpClient } from '@angular/common/http';
 
 @Injectable({ providedIn: 'root' })
@@ -36,7 +36,7 @@ export class UserService {
 ```
 
 ### switchMap
-```
+```typescript
 this.activatedRouter.params
   .pipe(
     switchMap(({ token }) => {
@@ -60,7 +60,7 @@ this.activatedRouter.params
   }
 ```
 ### combineLatest
-```
+```typescript
 combineLatest([this.fields$, this.steps$])
   .pipe(
     skip(1),

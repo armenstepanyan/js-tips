@@ -18,7 +18,7 @@ it detects that data could have changed. The result of change detection is that 
 For component initialization, Angular calls change detection explicitly. For asynchronous operations, 
 Angular uses a zone to detect changes in places where the data could have possibly mutated and it runs change detection automatically.
 
-```
+```typescript
 export class AppComponent implements OnInit {
   number = 0;
   count = 0;
@@ -44,7 +44,7 @@ Now `count` and `number` will be updated in view per 2 seconds
 
 **Note** The functions inside `this.zone.runOutsideAngular(() => {})` will not trigger change detection. For example, if we put `setTimeout` or `setInterval` inside `zone.runOutsideAngular` then `ngDoCheck` will be not triggered.
 
-```
+```typescript
 import { Component, NgZone, OnInit } from "@angular/core";
 
 export class AppComponent implements OnInit {
@@ -71,7 +71,7 @@ export class AppComponent implements OnInit {
 }
 ```
 View
-```
+```html
 <button (click)="test()">Test</button>
 ```
 After initialization we will see 2 check messages in console. After clicking on button we will see 1 check message for click, and 1 more for `setTimeOut`.

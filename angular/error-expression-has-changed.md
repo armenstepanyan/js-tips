@@ -7,7 +7,7 @@ Angular tries to keep code file and template file values synced and for that it 
 ### How to reproduce
 #### Example 1
 Change variables in lifecycle hooks.
-```
+```typescript
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 @Component({
@@ -37,7 +37,7 @@ Before `AfterViewInit` angular prepared template file, created the View and in t
 
 ### Solution
 - move variable change to `ngOnInit`
-```
+```typescript
   ngAfterViewInit(): void {
   }
   
@@ -47,7 +47,7 @@ Before `AfterViewInit` angular prepared template file, created the View and in t
 ```
 
 - Use Macro tasks after which change detection should run again 
-```
+```typescript
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.loading = false;
@@ -55,7 +55,7 @@ Before `AfterViewInit` angular prepared template file, created the View and in t
   }  
 ```
 OR by using `Promise.resolve()`
-```
+```typescript
   ngAfterViewInit(): void {
     Promise.resolve().then(() => {
       this.loading = false;
@@ -63,7 +63,7 @@ OR by using `Promise.resolve()`
   }
 ```
 - using ChangeDetectorRef. Forcing angular detect changes.
-```
+```typescript
 constructor(private cd: ChangeDetectorRef) {}
 
 ngAfterViewInit(): void {
@@ -74,7 +74,7 @@ ngAfterViewInit(): void {
 #### Example 2
 Emit event from child component.
 We need to create child component which will emit value change on `ngOnInit`
-```
+```typescript
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 @Component({
@@ -96,7 +96,7 @@ export class FirstComponent implements OnInit, AfterViewInit {
 
 ```
 Child component
-```
+```typescript
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 
@@ -119,7 +119,7 @@ This happens because child component initialization happens here. Parent already
 ![Lifecycle](/angular/lifecycle.png?raw=true)
 
 We can solve this error by creating service and using service variable in parent and child components.
-```
+```typescript
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { MyService } from '../my.service';
 
@@ -139,7 +139,7 @@ export class ChildComponent implements OnInit {
 }
 ```
 Parent
-```
+```typescript
 import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
 import { MyService } from '../my.service';
 
@@ -162,7 +162,7 @@ export class FirstComponent implements OnInit, AfterViewInit {
 
 #### Example 3
 Using getter
-```
+```typescript
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 
 @Component({
@@ -181,7 +181,7 @@ export class FirstComponent implements OnInit, AfterViewInit {
 ```
 
 Solution is to move randomValue in ngOnInit
-```
+```typescript
 ngOnInit() {
     this.randomValue = Math.random()
   }

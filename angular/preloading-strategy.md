@@ -18,7 +18,7 @@ This will disable all the preloading. This is default behaviour i.e. if you do n
 
 **CustomPreloadingStrategy.ts**
 
-```
+```typescript
 import { Injectable } from "@angular/core";
 import { Observable, of, timer } from "rxjs";
 import { flatMap, map } from "rxjs/operators";
@@ -50,7 +50,7 @@ export class CustomPreloadingStrategy implements PreloadingStrategy {
 
 **src\app\app-routing.module.ts**
 
-```
+```typescript
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, PreloadAllModules, NoPreloading } from '@angular/router';
 import { CustomPreloadingStrategy } from './custom-preloader';
