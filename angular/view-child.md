@@ -1,3 +1,57 @@
+**ViewChild** is an Angular decorator that allows a component to access a child component, directive, or element in its template. It provides a way for a parent component to interact with its child components or elements.
+
+In simple words, ViewChild helps a parent component "see" or "get a reference to" a specific element or component that is declared in its template.
+
+Using `ViewChild` to access DOM elements
+```typescript
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <div #myDiv>
+      This is a div element.
+    </div>
+    <button (click)="changeText()">Change Text</button>
+  `
+})
+export class ParentComponent implements AfterViewInit {
+  @ViewChild('myDiv', { static: false }) myDiv: ElementRef;
+
+  ngAfterViewInit() {
+    // The DOM element is now accessible after the view has been initialized
+    this.myDiv.nativeElement.style.backgroundColor = 'lightblue';
+  }
+
+  changeText() {
+    this.myDiv.nativeElement.textContent = 'Text changed!';
+  }
+}
+```
+Note: The second argument `{ static: false }` is used because we want to access the element after the view has been initialized.
+
+#### Using `ViewChild` to access angular elements
+```typescript
+import { Component, ViewChild } from '@angular/core';
+import { ChildComponent } from './child.component';
+
+@Component({
+  selector: 'app-parent',
+  template: `
+    <app-child></app-child>
+  `
+})
+export class ParentComponent {
+  @ViewChild(ChildComponent) childComponent: ChildComponent;
+
+  ngAfterViewInit() {
+    this.childComponent.doSomething();
+  }
+}
+
+```
+
+### Example
 Access child component function with template variable
 
 Child component
@@ -95,7 +149,11 @@ Change text
 ```
 
 ### ContentChild
-In case if child component has `ng-content` to access text content inside ng-content we need to use `ContentChild`. ViewChild will return empty because template is outside of child component
+In case if child component has `ng-content` to access text content inside ng-content we need to use `ContentChild`. ViewChild will return empty because template is outside of child component.
+
+`ContentChild` is an Angular decorator similar to ViewChild, but instead of querying for elements or components in the component's own template, it allows you to query for elements or components that are projected into the component via content projection.
+
+In simpler terms, `ContentChild` lets you access elements or components that are passed into a component as part of its content from the parent component.
 
 Child component view
 ```html

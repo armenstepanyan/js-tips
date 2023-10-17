@@ -1,5 +1,15 @@
-`NG_VALUE_ACCESSOR` allows angular component or directive to behave as a form control. We need to implement all functions from `ControlValueAccessor` 
-interface and tell angular if someone want to access `NG_VALUE_ACCESSOR` need to use our custom class - `CustomCheckboxComponent`
+`NG_VALUE_ACCESSOR` allows angular component or directive to behave as a form control. It is a special token in Angular that is used to provide a bridge between Angular's forms API and native DOM elements. It's a part of the Control Value Accessor pattern, which allows Angular forms to communicate with custom form controls
+
+### Purpose:
+* It enables two-way data binding for custom form controls.
+* It allows custom form controls to integrate seamlessly with Angular's forms API.
+
+### Usage:
+You use `NG_VALUE_ACCESSOR` when creating a custom form control (such as a custom input or custom component that acts as a form control).
+
+
+We need to implement all functions from `ControlValueAccessor` interface and tell angular if someone want to access `NG_VALUE_ACCESSOR` need to use our custom class - `CustomCheckboxComponent`
+
 ```typescript
 import { Component, OnInit } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms'

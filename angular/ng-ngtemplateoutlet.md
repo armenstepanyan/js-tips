@@ -4,6 +4,8 @@ Inserts an embedded view from a prepared TemplateRef.
 `ngTemplateOutletContext` A context object to attach to the EmbeddedViewRef. This should be an object, the object's keys
 will be available for binding by the local template let declarations. Using the key $implicit in the context object will set its value as default.
 
+`NgTemplateOutlet` is particularly useful when you want to reuse a template in different parts of your application or conditionally render different templates based on certain conditions. It provides a flexible way to manage the rendering of dynamic content.
+
 
 ```typescript
 export class AppComponent {
@@ -124,4 +126,3 @@ View
 </app-list>
 ```
 The wrapper component `app-list` receive `list` as input, handle remove and emit output event when add new item. In view to call wrapper component function, we need to make reference to it `#wrapper` and then use functions - `wrapper.removeItem(i)`
-
