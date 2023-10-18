@@ -5,7 +5,7 @@ and immediately after `ngOnInit()` on the first run.
 Here we have one parent component, 2 child ( `first` and `second`) and one (`third`) component inside `second`.
 
 Parent
-```
+```typescript
 @Component({
   selector: "my-app",
   templateUrl: "./app.component.html",
@@ -30,7 +30,7 @@ export class AppComponent implements DoCheck {
 ```
 
 First Component
-```
+```typescript
 import {
   Component,
   Input,
@@ -63,7 +63,7 @@ export class FirstComponent implements DoCheck {
 ```
 
 Second component
-```
+```typescript
 import { Component, DoCheck } from "@angular/core";
 
 @Component({
@@ -89,7 +89,7 @@ export class SecondComponent implements DoCheck {
 ```
 
 Third component
-```
+```typescript
 import { Component, DoCheck } from "@angular/core";
 
 @Component({

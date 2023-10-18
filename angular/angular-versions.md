@@ -40,6 +40,7 @@ The `NgOptimizedImage` directive in Angular is responsible for implementing perf
     height="3000" />
 ```
 
+### CanMatch
 - canMatch
 The `CanMatch` guard is a new feature that was introduced in Angular **v14.2**. It will activate the route and load the lazy-loaded component if all guards return true, otherwise it will navigate to the next route with the same name.
 

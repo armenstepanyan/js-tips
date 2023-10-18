@@ -64,7 +64,7 @@ View
 [Example of HostBinding](https://github.com/armenstepanyan/js-tips/blob/master/angular/ng-directive.md#host-property)
 
 ### NgTemplateOutlet
-`NgTemplateOutlet`` is a structural directive in Angular that allows you to conditionally render a template. It gives you the ability to choose which template to render dynamically at runtime.
+`NgTemplateOutlet` is a structural directive in Angular that allows you to conditionally render a template. It gives you the ability to choose which template to render dynamically at runtime.
 ```typescript
 @Component({
   selector: 'app-example',
@@ -176,3 +176,51 @@ export class ParentComponent {}
 
 ### Pipes
 In Angular, a pipe is a feature that allows you to transform or format data before displaying it in the template.
+[Pipe example](https://github.com/armenstepanyan/js-tips/blob/master/angular/ng-pipes.md)
+
+
+### Guards
+ Guards that can be used to control the navigation flow in an Angular application.
+
+ - CanActivate
+ Determines if a route can be activated. It's used to prevent a user from navigating to a specific route if certain conditions are not met.
+
+ - CanActivateChild
+ Determines if a route can be deactivated. It's used to prompt the user for confirmation before leaving a page, for example, in unsaved form scenarios
+
+ - CanLoad
+ Determines if a lazy-loaded module can be loaded. It prevents the application from loading a module until specific conditions are met.
+
+ - Resolve
+ Used to pre-fetch data before a component is activated, ensuring that the required data is available before the component is displayed.
+
+ - CanMatch (from angular 14)
+ A guard determines if a route can be matched. If all guards return true, navigation continues, and the Router uses the route. If any guard returns false, the route is skipped for matching, and other route configurations are processed instead. In other words, it allows you to control whether a specific route can be activated based on certain conditions. [CanMatch example](https://github.com/armenstepanyan/js-tips/blob/master/angular/angular-versions.md#canmatch)
+
+ [Guard example](https://github.com/armenstepanyan/js-tips/blob/master/angular/ng-module.md#create-canload-guard)
+
+### Resolution modifiers
+ Angular dependency injection resolution mechanism of the service starts from component and stops either when a service is found or `NUllInjector` is reached. [Angular link](https://angular.io/guide/hierarchical-dependency-injection)
+
+ [Example](https://github.com/armenstepanyan/js-tips/blob/master/angular/providers.md#resolution-modifiers)
+
+ ### Injection tokens
+ An injection token in Angular is a string or object that acts as a unique identifier for a dependency when it is registered in the Angular dependency injection system. It's used to look up and retrieve dependencies from the injector
+
+ ```typescript
+import { InjectionToken } from '@angular/core';
+
+export const MY_INJECTION_TOKEN = new InjectionToken<string>('my-injection-token'); 
+ ```
+Usage in Providers:
+```typescript
+import { MY_INJECTION_TOKEN } from './my-injection-token';
+
+@NgModule({
+  providers: [
+    { provide: MY_INJECTION_TOKEN, useValue: 'my-config-value' }
+  ]
+})
+export class MyModule { }
+```
+[Example](https://github.com/armenstepanyan/js-tips/blob/master/angular/injection-token.md)
