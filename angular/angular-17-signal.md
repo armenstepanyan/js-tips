@@ -47,3 +47,36 @@ View
     </ul>
   }
 ```
+
+#### Filter users by query
+Modify users signal to `computed` signal
+```typescript
+export class TestComponent {
+
+  initialUsers: User[] = [...];
+
+  query = signal('');
+
+  users = computed(() => this.initialUsers.filter(user => user.name.includes(this.query())) )
+
+  handleInput(e: Event) {
+    this.query.set((e.target as any).value);
+  }
+
+```
+
+View
+```html
+<p>
+  <input type="text" (input)="handleInput($event)" placeholder="Start typing..." >
+</p>
+@if(users()){
+  <ul>
+    @for(user of users(); track user.id){
+      <li>
+        {{ user.id }}. {{ user.name }}
+      </li>
+    }
+  </ul>
+}
+```
