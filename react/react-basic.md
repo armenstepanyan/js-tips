@@ -59,7 +59,7 @@ npx create-react-app my-app
 
 ### Conditional Rendering
 Set condition in `render` function
-```
+```typescript
 export default class Welcome extends Component {
 
     constructor(props) {
@@ -69,20 +69,18 @@ export default class Welcome extends Component {
              isLoggedId: true,
         }
     }
-    
 
     render() {
         if (this.state.isLoggedId) {
             return <div>Welcome User</div> 
         } else {
            return <div>Welcome Guest</div> 
-        }
-       
+        }       
     }
 }
 ```
 Or with variable
-```
+```typescript
     render() {
         let message;
         if (this.state.isLoggedId) {
@@ -95,23 +93,20 @@ Or with variable
     }
 ```
 With ternary operator
-```
+```typescript
     render() {
-
         return (
-            this.state.isLoggedId ?
-            <div>Welcome User</div> :
-            <div>Welcome Guest</div> 
+            this.state.isLoggedId ? <div>Welcome User</div> : <div>Welcome Guest</div> 
         )
     }
 ```
 Or
-```
+```typescript
 return this.state.isLoggedId && <div>Welcome User</div>
 ```
 
 ### Display array
-```
+```typescript
 import React from 'react'
 
 function List() {
@@ -132,7 +127,7 @@ function List() {
 export default List
 ```
 Or with variable
-```
+```typescript
 function List() {
     const list = ['aaa', 'bbb', 'ccc', 'ddd'];
     const result = list.map(item => <li key={item}>{item}</li>);
@@ -145,7 +140,7 @@ function List() {
 ```
 #### Iterating array of object
 Create `Person` component
-```
+```typescript
 import React from 'react'
 
 function Person({ person }) {
@@ -159,7 +154,7 @@ function Person({ person }) {
 export default Person
 ```
 List.js
-```
+```typescript
 import React from 'react';
 import Person from './Person';
 
@@ -188,11 +183,11 @@ export default List
 ```
 
 ### Class and Styles
-```
+```html
 <h1 className="primary">Style test</h1>
 ```
 OR 
-```
+```typescript
 function StyleSheet(props) {
    let className =  props.primary ? 'primary' : '';
     return (
@@ -204,12 +199,12 @@ function StyleSheet(props) {
 ```
 
 OR
-```
+```html
  <h1 className={`${className} custom-class`}>Style test</h1>
 ```
 
 OR with style object
-```
+```typescript
 function StyleSheet() {
     const heading = {
         color: 'red',
@@ -224,21 +219,21 @@ function StyleSheet() {
 ```
 
 #### Inline style
-```
+```html
 <p style={{ backgroundColor: !isActive ? 'green' : 'gray' }}>{name}</p>
 ```
 
 Component scoped styles. Create `css` file with `{name}.module.css` pattern
 
 **appStyle.module.css**
-```
+```css
 .green {
     background-color: green;
 }
 ```
 
 Now in `app.js` we need to import and use class names like this `styles.green`
-```
+```typescript
 import styles from './appStyles.module.css';
 
 function App() {
@@ -257,11 +252,11 @@ export default App;
 Controlled Components. Making the React state to be the “single source of truth”. Then the React component that renders a form also controls what happens in that form on subsequent user input. An input form element whose value is controlled by React in this way is called a **controlled component**
 
 Simple example
-```
+```typescript
 export class Form extends Component {
     constructor(props) {
         super(props)
-    
+
         this.state = {
              username: '',
              topic: 'react'
@@ -290,11 +285,7 @@ export class Form extends Component {
             <form onSubmit={this.handleSubmit}>
                 <div>
                     <label>Username</label>
-                    <input 
-                        type="text" 
-                        value={this.state.username} 
-                        onChange={this.handleUsernameChange}
-                    />
+                    <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
                 </div>
                 <div>
                     <select value={this.state.topic} onChange={this.handleTopicChange}>
@@ -317,9 +308,8 @@ export default Form
 ```
 
 Function component
-```
+```typescript
 import React, { useState } from 'react';
-
 
 export default function Form() {
 
@@ -335,7 +325,7 @@ export default function Form() {
 
 ### Counter example
 With function using `useState`
-```
+```typescript
 import React, { useState } from 'react';
 
 export default function Counter() {
@@ -352,7 +342,7 @@ export default function Counter() {
 ```
 
 Same example with class
-```
+```typescript
 import React from 'react';
 
 export class Counter2 extends React.Component {
@@ -380,5 +370,61 @@ export class Counter2 extends React.Component {
 ```
 
 [Stackblitz](https://stackblitz.com/edit/a-react-counter?file=src/Counter.js)
+
+### Install React with vite
+```cmd
+npm create vite@latest
+```
+
+### Passing output/call parent's function
+```typescript
+function App() {
+
+  const userNameGenerated = (userName: string) => {
+    console.log(userName)
+  }
+
+  return (
+    <>
+      <User defaultName='John' defaultLastname='Doe' userNameGenerated={userNameGenerated}/>
+    </>
+  )
+}
+```
+
+Child `User` component
+```typescript
+interface InputData {
+    defaultName: string;
+    defaultLastname: string;
+    userNameGenerated: (userName: string) => void
+}
+
+export function User({ defaultName = '', defaultLastname = '', userNameGenerated }: InputData){
+
+    const [name, setName] = useState(defaultName);
+    const [lastname, setLastname] = useState(defaultLastname);
+
+    useEffect(() => {
+        const userName = `${name}_${lastname}`.toLowerCase();
+        // 'username' is ready, notify parent
+        userNameGenerated(userName)
+    }, [name, lastname, userNameGenerated])
+    
+    return (
+        <>
+            <h1>User</h1>
+            <p>
+                <input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Name"/>
+            </p>
+            <p>
+                <input type="text" value={lastname} onChange={e => setLastname(e.target.value)} placeholder="Lastname"/>
+            </p>
+        </>
+    )
+
+}
+
+```
 
 
