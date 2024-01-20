@@ -369,3 +369,45 @@ class Child extends Base {
   }
 }
 ```
+
+### Configure component with Injection Token
+
+```typescript
+import { InjectionToken } from '@angular/core';
+
+export const MY_CONFIG_TOKEN = new InjectionToken<boolean>('my-config');
+```
+
+Module
+```typescript
+import { NgModule } from '@angular/core';
+import { MY_CONFIG_TOKEN } from './your-injection-token-file';
+
+@NgModule({
+  providers: [
+    MyConfigService,
+    { provide: MY_CONFIG_TOKEN, useValue: true },
+  ],
+})
+export class MyModule {}
+
+```
+
+Component
+```typescript
+import { Component, Inject } from '@angular/core';
+import { MY_CONFIG_TOKEN, MyConfig } from './your-injection-token-file';
+
+@Component({
+  selector: 'app-my-component',
+  template: '...',
+})
+export class MyComponent {
+  constructor(@Inject(MY_CONFIG_TOKEN) private myConfig: boolean) {
+    console.log('Injected Config:', this.myConfig);
+  }
+}
+
+```
+
+
