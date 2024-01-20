@@ -205,14 +205,14 @@ export class EditPostComponent implements OnInit {
 
 ### ngModel
 One way data binding using `ngModel` and `ngModelChange`
-```
+```html
 <input type="text" [ngModel]="value" (ngModelChange)="setValue($event)">
 <p>
   Value is {{ value }}
 </p>
 ```
 component.ts
-```
+```typescript
 export class MainComponent implements OnInit {
   value = "hello";
   
@@ -326,6 +326,15 @@ export class MyInputComponent implements OnInit, OnChanges {
 
 ```
 
+### Output
+```html
+<app-child (valueChanged)="onDataChange($event)"></app-child>
+```
+
+```typescript
+@Output() valueChange: EventEmitter<string> = new EventEmitter<string>();
+```
+
 ### zone.runOutsideAngular
 In case if we using setTimeout to change dom element behavior (size, value ...) we need to wrap it in `zone.runOutsideAngular` to skip changeDetection cycle
 
@@ -354,3 +363,31 @@ export class DropdownComponent implements OnInit {
 
 ```
 
+### FormControl
+```typescript
+nameControl: FormControl = new FormControl('', [Validators.required]);
+
+// set custom error
+this.nameControl.setErrors({ duplicateName: true });
+
+// listen control value change
+this.nameControl.valueChanges
+    .pipe(
+    distinctUntilChanged(),
+    debounceTime(500),
+    tap(newValue => {
+         this.saveProjectName(newValue);
+    }),
+    takeUntil(this.destroy$),
+    ).subscribe();
+```
+
+```html
+  <mat-form-field>
+    <input matInput [formControl]="nameControl" placeholder="Enter folder name" (keyup.enter)="create()" />
+    <mat-error>
+      <span *ngIf="nameControl.hasError('required')">Name is required</span>
+      <span *ngIf="nameControl.hasError('duplicateName')">Folder exists</span>
+    </mat-error>
+  </mat-form-field>
+```
