@@ -224,3 +224,9 @@ import { MY_INJECTION_TOKEN } from './my-injection-token';
 export class MyModule { }
 ```
 [Example](https://github.com/armenstepanyan/js-tips/blob/master/angular/injection-token.md)
+
+### Signals
+Angular Signals is a system that granularly tracks how and where your state is used throughout an application, allowing the framework to optimize rendering updates.
+[Signal example](https://github.com/armenstepanyan/js-tips/blob/master/angular/angular-17-signal.md)
+
+[Signal vs RxJs](https://github.com/armenstepanyan/js-tips/blob/master/angular/signal-rxjs.md)
