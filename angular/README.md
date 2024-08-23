@@ -182,19 +182,19 @@ In Angular, a pipe is a feature that allows you to transform or format data befo
 ### Guards
  Guards that can be used to control the navigation flow in an Angular application.
 
- - CanActivate
+ - **CanActivate**
  Determines if a route can be activated. It's used to prevent a user from navigating to a specific route if certain conditions are not met.
 
- - CanActivateChild
+ - **CanActivateChild**
  Determines if a route can be deactivated. It's used to prompt the user for confirmation before leaving a page, for example, in unsaved form scenarios
 
- - CanLoad
+ - **CanLoad**
  Determines if a lazy-loaded module can be loaded. It prevents the application from loading a module until specific conditions are met.
 
- - Resolve
+ - **Resolve**
  Used to pre-fetch data before a component is activated, ensuring that the required data is available before the component is displayed.
 
- - CanMatch (from angular 14)
+ - **CanMatch** (from angular 14)
  A guard determines if a route can be matched. If all guards return true, navigation continues, and the Router uses the route. If any guard returns false, the route is skipped for matching, and other route configurations are processed instead. In other words, it allows you to control whether a specific route can be activated based on certain conditions. [CanMatch example](https://github.com/armenstepanyan/js-tips/blob/master/angular/angular-versions.md#canmatch)
 
  [Guard example](https://github.com/armenstepanyan/js-tips/blob/master/angular/ng-module.md#create-canload-guard)
@@ -230,3 +230,7 @@ Angular Signals is a system that granularly tracks how and where your state is u
 [Signal example](https://github.com/armenstepanyan/js-tips/blob/master/angular/angular-17-signal.md)
 
 [Signal vs RxJs](https://github.com/armenstepanyan/js-tips/blob/master/angular/signal-rxjs.md)
+
+### DestroyRef and takeUntilDestroyed
+DestroyRef lets you set callbacks to run for any cleanup or destruction behavior.
+[DestroyRef example](https://github.com/armenstepanyan/js-tips/blob/master/angular/destroyRef.md)
