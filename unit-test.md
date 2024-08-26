@@ -297,6 +297,8 @@ export class HighlightDirective {
     }
 }
 
+//-----------------------------------------//
+
 @Component({
     selector: 'app-example',
     template: `
@@ -589,6 +591,45 @@ describe('ExampleComponent', () => {
 });
 ```
 
+#### spyOnProperty with observables
+
+Incase if we have readonly observable for example and we can spy `subscribe` with a help of `spyOnProperty`
+
+```ts
+export class UserData {
+    readonly user$: Observable<User>;
+
+    constructor() {
+        this.user$ = combineLatest([subject1, subject2]);
+    }
+
+    getUserData() {
+        let userId = '';
+        this.user$.subscribe((user) => {
+            userId = user.id;
+        });
+    }
+}
+```
+
+Testing
+
+```ts
+it('should get specnav UUID', () => {
+    const mockUser = {
+        id: 1,
+        name: 'John',
+    };
+    const mockObservable = of(mockUser);
+
+    spyOn(component.user$, 'subscribe').and.callFake((observer) => {
+        return mockObservable.subscribe(observer);
+    });
+    const userId = component.getUserData();
+    expect(userId).toEqual(1);
+});
+```
+
 ### Summary: Jasmine Spy Utilities
 
 In addition to `spyOn`, `spyOnProperty`, and their variants, Jasmine provides `createSpy` and `createSpyObj` for creating mock functions and objects. These tools are useful for creating stand-alone spies or mock objects that can simulate the behavior of complex dependencies.
@@ -779,3 +820,42 @@ it('should reset spies in a spy object', () => {
 -   **`calls.reset()`** is **not** applicable to:
 
     -   Spies created with `spyOnProperty` (for properties).
+
+### OnPush detection
+
+When using Angular's `OnPush` change detection strategy, you need to manually trigger change detection in your unit tests to ensure that the view is updated.
+
+```ts
+import { ChangeDetectorRef } from '@angular/core';
+
+describe('should disable button', () => {
+    let changeDetectorRef: ChangeDetectorRef;
+
+    beforeEach(() => {
+        changeDetectorRef = fixture.debugElement.injector.get(ChangeDetectorRef);
+    });
+
+    it('should disable brush tool', () => {
+        component.isBtnDisabled = true;
+        changeDetectorRef.detectChanges(); // Manually trigger change detection
+        const btnEl = fixture.nativeElement.querySelector('#btn');
+        expect(btnEl.getAttribute('disabled')).toEqual('true');
+    });
+});
+```
+
+#### spying with ngMock
+
+```ts
+const afterOpenedSubject = new Subject<void>();
+const afterClosedSubject = new Subject<void>();
+beforeEach(() => {
+    ngMocks.stubMember(matDialog, 'open', () =>
+        MockService(MatDialogRef, {
+            afterOpened: () => afterOpenedSubject.asObservable(),
+            afterClosed: () => afterClosedSubject.asObservable(),
+        })
+    );
+    spyOn(matDialog, 'open').and.callThrough();
+});
+```
