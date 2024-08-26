@@ -591,9 +591,9 @@ describe('ExampleComponent', () => {
 });
 ```
 
-#### spyOnProperty with observables
+#### spyOn with observables
 
-Incase if we have readonly observable for example and we can spy `subscribe` with a help of `spyOnProperty`
+In case if we have readonly observable for example and we can spy `subscribe` with a help of `spyOnProperty`
 
 ```ts
 export class UserData {
