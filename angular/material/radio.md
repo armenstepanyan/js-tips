@@ -1,6 +1,6 @@
 Angular material radio input. In html we are creating local reference to `mat-radio-button` by using `#radoBtn`, which is instance of `MatRadioButton`.
 
-```
+```html
 <mat-radio-group [(ngModel)]="favoriteSeason">
 	
   <mat-radio-button 
@@ -17,7 +17,7 @@ Angular material radio input. In html we are creating local reference to `mat-ra
 ```
 
 Controller
-```
+```ts
 export class RadioNgModelExample {
   favoriteSeason: string;
   seasons: string[] = ["Winter", "Spring", "Summer", "Autumn"];
@@ -43,7 +43,7 @@ export class RadioNgModelExample {
 
 ### Set checked from component
 html
-```
+```html
   <mat-radio-button
     *ngFor="let item of values"
     #radioBtn
@@ -55,7 +55,7 @@ html
   </mat-radio-button>
 ```
 Controller
-```
+```ts
 export class RadioItemComponent implements OnInit, AfterViewInit {
   @Input() values;
 
