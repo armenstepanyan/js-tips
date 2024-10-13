@@ -129,48 +129,47 @@ npm install typescript --save-dev
 
 #### 3. Simple Example of Using @decorator
 ```ts
-// Enabling decorators for a class property
-
 // A simple property decorator that logs when a property is accessed or set
-function LogProperty(target: any, propertyKey: string) {
-  let value = target[propertyKey];
-
-  const getter = () => {
-    console.log(`Get: ${propertyKey} => ${value}`);
-    return value;
-  };
-
-  const setter = (newVal: any) => {
-    console.log(`Set: ${propertyKey} => ${newVal}`);
-    value = newVal;
-  };
-
-  Object.defineProperty(target, propertyKey, {
-    get: getter,
-    set: setter,
-    enumerable: true,
-    configurable: true
-  });
-}
-
-class Person {
-  @LogProperty
-  public name: string;
-
-  constructor(name: string) {
-    this.name = name;
+function LogProperty(target: any, propertyKey: string | symbol) {
+    let value: any;
+  
+    const getter = () => {
+      console.log(`Get: ${String(propertyKey)} => ${value}`);
+      return value;
+    };
+  
+    const setter = (newVal: any) => {
+      console.log(`Set: ${String(propertyKey)} => ${newVal}`);
+      value = newVal;
+    };
+  
+    Object.defineProperty(target, propertyKey, {
+      get: getter,
+      set: setter,
+      enumerable: true,
+      configurable: true,
+    });
   }
-}
-
-// Example usage
-const person = new Person("Alice");
-person.name = "Bob"; // This will trigger the setter and log: Set: name => Bob
-console.log(person.name); // This will trigger the getter and log: Get: name => Bob
-
+  
+  class Person {
+    @LogProperty
+    public name: string;
+  
+    constructor(name: string) {
+      this.name = name;
+    }
+  }
+  
+  // Example usage
+  const person = new Person("Alice");
+  person.name = "Bob"; // This will trigger the setter and log: Set: name => Bob
+  console.log(person.name); // This will trigger the getter and log: Get: name => Bob
+  
 ```
 
 Output
 ```
+Set: name => Alice
 Set: name => Bob
 Get: name => Bob
 
@@ -179,3 +178,31 @@ Get: name => Bob
 ### Summary of Requirements in tsconfig.json:
 **"experimentalDecorators": true:** Enables the use of the @decorator syntax.
 **"emitDecoratorMetadata": true:** (Optional) If you need metadata reflection, especially useful for frameworks like Angular.
+
+#### 4. Compile and Run
+If you just run `tsc`, it should automatically pick up the tsconfig.json from the root of your project directory. However, if it's not picking it up automatically, you can explicitly tell the TypeScript compiler to use it:
+
+```
+tsc -p tsconfig.json
+
+```
+The -p flag stands for "project", and it instructs the TypeScript compiler to use the tsconfig.json file from the specified path.
+
+If you want to compile a specific file (instead of all files in the project), you can specify the file name after the tsc command. For example:
+```
+{
+  "compilerOptions": {
+  // ...
+  },
+  "include": [
+    "index.ts"
+  ]
+ }
+
+```
+
+Run compiled  code
+```
+node main.js
+
+```
