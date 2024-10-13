@@ -96,6 +96,14 @@ In TypeScript (ES6), the @decorator syntax can be used to decorate classes, meth
 Here's how you can use the Decorator Pattern with the `@decoratorName` syntax.
  
  #### 1. Enabling Decorators in tsconfig.json
+
+Create **tsconfig.json** file
+```
+tsc --init
+```
+
+Note: if `typescript` is not installed run `npm install -g typescript` comand to install it globally 
+ 
  ```ts
 {
   "compilerOptions": {
@@ -109,6 +117,11 @@ Here's how you can use the Decorator Pattern with the `@decoratorName` syntax.
 #### 2. Installing Required Packages
 In order to transpile and run your TypeScript code with decorators, ensure you have TypeScript installed.
 You can install TypeScript and other necessary packages via npm if not already installed:
+
+Generate package.json file: (`-y` for default metadata)
+```
+npm init -y
+```
 
 ```
 npm install typescript --save-dev
