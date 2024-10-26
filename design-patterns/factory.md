@@ -63,3 +63,74 @@ emailNotification.send("Hello via Email!");
 
 This design pattern is particularly helpful in larger JavaScript applications where managing dependencies between classes is key.
 
+### Angular Example
+1. Define the Logging Service Interface
+In Angular, we typically use an abstract class as an interface for services.
+```ts
+// logging.service.ts
+export abstract class LoggingService {
+  abstract log(message: string): void;
+}
+```
+
+2. Concrete Implementations
+Create concrete classes that implement the LoggingService interface.
+```ts
+// console-logging.service.ts
+import { Injectable } from '@angular/core';
+import { LoggingService } from './logging.service';
+
+@Injectable()
+export class ConsoleLoggingService extends LoggingService {
+  log(message: string): void {
+    console.log(`Console Log: ${message}`);
+  }
+}
+
+// server-logging.service.ts
+import { Injectable } from '@angular/core';
+import { LoggingService } from './logging.service';
+
+@Injectable()
+export class ServerLoggingService extends LoggingService {
+  log(message: string): void {
+    // Imagine this sends the log message to a remote server
+    console.log(`Server Log: ${message}`);
+  }
+}
+```
+3. Factory Function
+Create a factory function that will determine which logging service to use.
+```ts
+// logging.factory.ts
+import { ConsoleLoggingService } from './console-logging.service';
+import { ServerLoggingService } from './server-logging.service';
+import { LoggingService } from './logging.service';
+
+export function loggingFactory(environment: any): LoggingService {
+  return environment.production
+    ? new ServerLoggingService()
+    : new ConsoleLoggingService();
+}
+```
+
+4. Use the Factory in a Provider
+In your module, use the factory function in a provider to determine which logging service to use at runtime.
+```ts
+// app.module.ts
+import { LoggingService } from './logging.service';
+import { loggingFactory } from './logging.factory';
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [],
+  providers: [
+    {
+      provide: LoggingService,
+      useFactory: () => loggingFactory(environment),
+    },
+  ],
+  bootstrap: [],
+})
+export class AppModule {}
+```
