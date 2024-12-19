@@ -6,7 +6,7 @@ A Promise is in one of these states:
 * fulfilled: meaning that the operation completed successfully.
 * rejected: meaning that the operation failed.
 
-```
+```ts
 var promise = new Promise(function(resolve, reject) {
   // Make any async operation then call one of this functions
   // resolve(result) - if success 
@@ -18,7 +18,7 @@ promise.then(onFulfilled, onRejected)
 
 
 Example with setTimeout
-```
+```ts
 let promise = new Promise((resolve, reject) => {
   setTimeout(() => {
     // set promise to fulfilled state with "result message"
@@ -40,7 +40,7 @@ promise
 
 ```
 ## Load script using Promise
-```
+```ts
 function loadScript(url) {
   return new Promise((resolve, reject) => {
 
@@ -64,7 +64,7 @@ function loadScript(url) {
 
 Usage [Example on Stackblitz](https://stackblitz.com/edit/t-promise?embed=1&file=index.ts)
 
-```
+```ts
   loadScript(url)
     .then(
       result => {
@@ -80,7 +80,7 @@ Usage [Example on Stackblitz](https://stackblitz.com/edit/t-promise?embed=1&file
 ```
 
 Validate image
-```
+```ts
 function validateImage(imageSrc: string) {
   return new Promise((resolve, reject) => {
     if (!imageSrc) {
@@ -116,7 +116,7 @@ function validateImage(imageSrc: string) {
 
 ## Promise chain
 
-```
+```ts
 new Promise(function(resolve, reject) {
 
   setTimeout(() => resolve(1), 1000); // (line 1)
@@ -157,7 +157,7 @@ Promise.all takes an array of promises (it technically can be any iterable, but 
 The new promise resolves when all listed promises are settled, and the array of their results becomes its result.
 [Stackblitz example](https://stackblitz.com/edit/a-promise-all-settled?embed=1&file=index.js)
 
-```
+```ts
 const promise = value => {
   return  new Promise((resolve) => {
   setTimeout(() => { 
@@ -176,7 +176,7 @@ Promise.all([p1, p2]).then(data => {
 ```
 
 If any of the promises is rejected, the promise returned by Promise.all immediately rejects with that error.
-```
+```ts
 Promise.all([
   new Promise((resolve, reject) => setTimeout(() => resolve(1), 1000)),
   new Promise((resolve, reject) => setTimeout(() => reject(new Error("Error!")), 500)),
@@ -190,8 +190,8 @@ If one promise rejects, `Promise.all` immediately rejects, completely forgetting
 
 To handle error and continue Promise chain work need to add `catch` to promise and return error.
 
-```
-var p = Promise.all([
+```ts
+const p = Promise.all([
   Promise.resolve(1),
   Promise.resolve(2),
   Promise.reject("Error").catch(e => e), // catch error here
@@ -215,3 +215,51 @@ Promise.all rejects as a whole if any promise rejects. That’s good for 'all or
 - {status:"rejected", reason:error} for errors.
 
 [Stackblitz Example](https://stackblitz.com/edit/a-promise-all-settled?file=index.js)
+
+### Catching errors
+With the help of `try/catch` we cannot catch Promise error. The reason you can't catch the rejected promise error in the `try...catch` block is that `try...catch` only works for synchronous code. Promises are asynchronous, so the rejection happens outside the scope of the `try...catch` block.
+
+To handle promise rejections, you should use the .catch method or async/await with try...catch. Here's how you can modify your code to handle the promise rejection:
+
+```ts
+Promise.reject('test error').catch(error => {
+    console.log('inside catch block:',error)
+})
+```
+
+Output will be
+```
+inside catch block: test error
+```
+
+With `async` function
+```ts
+(async () => {
+    try {
+        await Promise.reject('test')
+    } catch (error) {
+        console.log('inside catch block', error);
+    }
+})()
+
+```
+
+Output:
+```
+inside catch block test
+```
+
+In this example error is not catched:
+
+```
+try {
+    Promise.reject('test')
+} catch(error) {
+    console.log('inside catch block',error)
+}
+```
+
+Output:
+```json
+Uncaught (in promise) test
+```
