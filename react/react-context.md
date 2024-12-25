@@ -1,128 +1,108 @@
-Create ThemeContext.js
-`{this.props.children}` reffers the child elements that wraps `<ThemeContextProvider>`
+### React Context
+React Context is a feature that allows you to share state and data across your component tree without having to pass props down manually at every level. It is particularly useful for global data that needs to be accessed by many components at different nesting levels, such as user authentication status, theme settings, or language preferences.
 
-```
-import React, { createContext, Component } from 'react';
+#### Step 1: Create a Context
+UserContext.tsx
+```ts
+import React, { createContext, useState, useContext, ReactNode } from 'react';
 
-export const ThemeContext = createContext();
-
-class ThemeContextProvider extends Component {
-    state = {
-        isLightTheme: true,
-        light: { syntax: '#555', ui: '#ddd', bg: '#eee' },
-        dark:  { syntax: '#ddd', ui: '#333', bg: '#555' }
-    }
-
-    render() {
-        return (
-            <ThemeContext.Provider value={{...this.state}}>
-                {this.props.children}
-            </ThemeContext.Provider>
-        );
-    }
+interface UserContextType {
+  userName: string;
+  setUserName: (name: string) => void;
 }
 
-export default ThemeContextProvider;
-```
-App.js
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
+export const UserProvider = ({ children }: { children: ReactNode }) => {
+  const [userName, setUserName] = useState('test');
+
+  return (
+    <UserContext.Provider value={{ userName, setUserName }}>
+      {children}
+    </UserContext.Provider>
+  );
+};
+
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error('useUser must be used within a UserProvider');
+  }
+  return context;
+};
 ```
-import ThemeContextProvider from "./contexts/ThemeContext";
-import { Navbar } from "./Navbar";
+
+#### Step 2: Wrap Your App with the Provider
+main.tsx
+
+```ts
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import App from './App.tsx'
+import { UserProvider } from './UserContext';
+
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <UserProvider>
+      <App />    
+    </UserProvider>
+  </StrictMode>,
+)
+```
+
+#### Step 3: Use the Context in Your Components
+```ts
+import { useEffect, useMemo, useState } from "react";
+
+import "./App.css";
+import User from "./User";
+import { useUser } from "./UserContext";
 
 function App() {
+  const [count, setCount] = useState(0);
+  const [name, setName] = useState("test name");
+
+  const { userName, setUserName } = useUser();
+
   return (
-      <ThemeContextProvider>
-        <Navbar/>
-      </ThemeContextProvider>      
-    </div>
+    <>
+      <div>
+        <h2>App component</h2>
+        <p>
+          <label htmlFor="username">Update User Name</label>
+          <input
+            type="text"
+            id="username"
+            value={userName}
+            onChange={(e) => setUserName(e.target.value)}
+          />
+        </p>
+      </div>
+      <div>
+        <h2>User component</h2>
+        <User />
+      </div>
+    </>
   );
 }
 
 export default App;
 ```
 
+User.tsx
+```ts
+import { useUser } from "./UserContext";
 
-Navbar.js - use provided context data
-
-```
-import React, { Component } from 'react'
-import { ThemeContext } from './contexts/ThemeContext'
-
-export class Navbar extends Component {
-    static contextType = ThemeContext;
-
-    render() {
-        console.log(this.context);
-        const { isLightTheme, light, dark } = this.context;
-        const theme = isLightTheme ? light : dark;
-        return (
-            <div style={{ background: theme.ui, color: theme.syntax }}>
-                <ul>
-                    <li>Home</li>
-                    <li>Dashboard</li>
-                </ul>
-            </div>
-        )
-    }
+function User() {
+  const { userName } = useUser();
+    return ( 
+       <>
+          <div>
+            Username from context is: <b>{userName}</b>
+          </div>
+       </>
+     );
 }
 
-export default Navbar
-```
-
-### Using Context.Consumer
-```
-export class Navbar extends Component {
-
-
-    render() {
-        
-     return (
-        <ThemeContext.Consumer>{(context) => {
-            const { isLightTheme, light, dark } = context;
-            const theme = isLightTheme ? light : dark;
-            return (
-            <div style={{ background: theme.ui, color: theme.syntax }}>
-                <ul>
-                    <li>Home</li>
-                    <li>Dashboard</li>
-                </ul>
-            </div>
-            )
-            
-        }}
-        </ThemeContext.Consumer>
-      )
-        
-        
-    }
-}
-
-export default Navbar
-```
-
-### useContext for function components
-```
-  <ThemeContextProvider>
-    <FunctionContext />
-  </ThemeContextProvider>
-```
-
-```
-import React, { useContext } from 'react';
-import { ThemeContext } from './contexts/ThemeContext'
-
-const FunctionContext = () => {
-    const { isLightTheme, light, dark } = useContext(ThemeContext);
-    const theme = isLightTheme ? light : dark;
-
-    return (
-       
-        <div style={{background: theme.bg, color: theme.syntax}}>
-            Some text
-        </div>
-    )
-}
-
-export default FunctionContext
+export default User;
 ```
