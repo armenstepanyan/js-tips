@@ -52,6 +52,45 @@ Specifically, we need to be able to
 
 [React Fiber with Example](https://medium.com/@armen_stepanyan/understanding-react-fiber-9a8412796ded)
 
+### React Flow Overview
+**1. Functional Components:**
+- In React, functional components are JavaScript functions that return JSX (which looks like HTML). JSX is a syntactic sugar that lets you write HTML-like code inside JavaScript.
+- When you write a React component, the function executes and returns a JSX representation of the UI, which React will render to the screen.
+For Eaxmple
+```ts
+const Welcome = () => {
+  return <h1>Welcome, User!</h1>;
+}
+```
+The virtual DOM representation of the above JSX would look something like this:
+```ts
+{
+    type: 'h1',
+    props: {
+        children: 'Welcome to React!'
+    }
+}
+```
+
+**2. Virtual DOM:**
+- The virtual DOM is a lightweight in-memory representation of the actual DOM. It's a copy of the real DOM, but it's not rendered on the screen. Instead, it's used by React to optimize updates to the real DOM.
+- When you return JSX from a functional component, React internally creates a virtual DOM tree that represents that JSX structure. React doesn't directly update the browser's DOM immediately. Instead, it works with the virtual DOM to calculate the minimal number of changes required.
+
+**Key Idea**: The virtual DOM is a JavaScript object that mimics the structure of the HTML elements returned by your component.
+
+**3. Reconciliation:**
+- When the state or props change, React re-renders the component function. A new virtual DOM tree is created based on the updated JSX returned by the component.
+
+- React then compares the new virtual DOM tree with the previous one using an algorithm called "reconciliation."
+
+- It figures out the **diffs (differences)** between the two virtual DOM trees and applies the minimal set of updates to the real DOM. This process is what makes React efficient.
+
+### In Simple Terms:
+- A React component (functional component) returns JSX, which is just a syntax extension of JavaScript that looks like HTML.
+- React turns the JSX into a virtual DOM—an internal representation of the UI.
+- When changes occur (like state or props), React updates the virtual DOM first and then figures out the smallest set of changes to apply to the actual DOM.
+
+  
 
 ### React Components & State
 React is built around the concept of components. A component is essentially a JavaScript function (or class in older versions) that returns JSX (which looks like HTML) that React will render into the DOM.
