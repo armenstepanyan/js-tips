@@ -50,7 +50,63 @@ Specifically, we need to be able to
 - reuse previously completed work.
 - abort work if it's no longer needed.
 
+[React Fiber with Example](https://medium.com/@armen_stepanyan/understanding-react-fiber-9a8412796ded)
 
+
+### React Components & State
+React is built around the concept of components. A component is essentially a JavaScript function (or class in older versions) that returns JSX (which looks like HTML) that React will render into the DOM.
+
+Each time you call a component function (or class), React re-renders that component and generates new virtual DOM elements, which are then compared to the previous virtual DOM state. If any changes are detected, React updates the actual DOM to reflect the new state.
+
+However, you don’t want to lose all of the data every time a component re-renders, especially when a user interacts with the UI, as it would be inefficient to start from scratch each time. This is where state comes in.
+
+#### State in React (useState)
+To keep track of data between renders, React introduces the concept of state. For functional components, useState is the most common hook that allows you to store and update values over time. When the state changes, React triggers a re-render to update the DOM with the new data.
+
+For example:
+
+```ts
+const [count, setCount] = useState(0);
+```
+
+Here, count is a piece of state, and setCount is a function that updates the state. React will remember the value of count across renders, so even after a re-render, count will still hold its value.
+
+#### Re-renders and Keeping Data
+When a React component function is called, it re-executes. However, React doesn’t just throw away all your previous data. It ensures that state values persist across re-renders by maintaining a "reference" to them. That way, you don't lose state when React re-renders the component.
+
+### Optimizing Re-renders
+To further optimize and control how and when re-renders happen, React introduced hooks like `useMemo`, `useCallback`, and `useEffect`.
+- useMemo:
+This hook memoizes the result of an expensive function so that it doesn’t get recalculated unless the dependencies change.
+It's useful for optimizing performance when a calculation depends on props or state and doesn't need to be recalculated on every render.
+
+```ts
+const memoizedValue = useMemo(() => computeExpensiveValue(a, b), [a, b]);
+```
+
+- useCallback
+This hook returns a memoized version of the callback function that only changes if the dependencies change.
+It's helpful for passing stable functions down to child components to avoid unnecessary re-renders.
+
+```ts
+const memoizedCallback = useCallback(() => { doSomething(a, b) }, [a, b]);
+```
+
+- useState
+This hook allows you to persist state across re-renders without having to worry about losing local variables between render cycles.
+
+```ts
+const [state, setState] = useState(initialState);
+```
+
+### In Simple Terms
+- Components: Functions that return JSX, which React renders into the DOM.
+
+- State: Used to keep track of dynamic data across re-renders. useState lets you maintain the value of variables even when the component re-renders.
+
+- Re-renders: React calls the component function again when state or props change. Without state, local variables would be reset each time.
+
+- Optimization: React hooks like useMemo, useCallback, and useState help manage state and performance during re-renders.
 
 ### Create new app
 ```
@@ -60,45 +116,36 @@ npx create-react-app my-app
 ### Conditional Rendering
 Set condition in `render` function
 ```typescript
-export default class Welcome extends Component {
+import React, { useState } from 'react';
 
-    constructor(props) {
-        super(props)
-    
-        this.state = {
-             isLoggedId: true,
-        }
-    }
+const Welcome = () => {
+    const [isLoggedId, setIsLoggedId] = useState(true);
 
-    render() {
-        if (this.state.isLoggedId) {
-            return <div>Welcome User</div> 
-        } else {
-           return <div>Welcome Guest</div> 
-        }       
-    }
-}
+    return (
+        <div>
+            {isLoggedId ? <div>Welcome User</div> : <div>Welcome Guest</div>}
+        </div>
+    );
+};
+
+export default Welcome;
 ```
 Or with variable
 ```typescript
-    render() {
-        let message;
-        if (this.state.isLoggedId) {
-            message =  <div>Welcome User</div> 
-        } else {
-            message = <div>Welcome Guest</div> 
-        }
-        return <div>{message}</div>
-       
+render() {
+    let message;
+    if (this.state.isLoggedId) {
+        message =  <div>Welcome User</div> 
+    } else {
+        message = <div>Welcome Guest</div> 
     }
+    return <div>{message}</div>
+   
+}
 ```
 With ternary operator
 ```typescript
-    render() {
-        return (
-            this.state.isLoggedId ? <div>Welcome User</div> : <div>Welcome Guest</div> 
-        )
-    }
+return  this.state.isLoggedId ? <div>Welcome User</div> : <div>Welcome Guest</div> 
 ```
 Or
 ```typescript
@@ -110,18 +157,18 @@ return this.state.isLoggedId && <div>Welcome User</div>
 import React from 'react'
 
 function List() {
-    const list = ['aaa', 'bbb', 'ccc'];
-    return (
-        <div>
-            <ul>
-                {
-                    list.map(item => {
-                        return <li key={item}>{item}</li>
-                    })
-                }
-            </ul>
-        </div>
-    )
+const list = ['aaa', 'bbb', 'ccc'];
+return (
+    <div>
+        <ul>
+            {
+                list.map(item => {
+                    return <li key={item}>{item}</li>
+                })
+            }
+        </ul>
+    </div>
+)
 }
 
 export default List
@@ -253,58 +300,49 @@ Controlled Components. Making the React state to be the “single source of trut
 
 Simple example
 ```typescript
-export class Form extends Component {
-    constructor(props) {
-        super(props)
+import React, { useState } from 'react';
 
-        this.state = {
-             username: '',
-             topic: 'react'
-        }
-    }
-    
-    handleUsernameChange = event => {
-        this.setState({
-            username: event.target.value
-        })
-    }
+const Form = () => {
+    const [username, setUsername] = useState('');
+    const [topic, setTopic] = useState('react');
 
-    handleTopicChange = event => {
-        this.setState({
-            topic: event.target.value
-        })
-    }
+    const handleUsernameChange = (event) => {
+        setUsername(event.target.value);
+    };
 
-    handleSubmit = event => {
+    const handleTopicChange = (event) => {
+        setTopic(event.target.value);
+    };
+
+    const handleSubmit = (event) => {
         event.preventDefault();
-        console.log(this.state)
-    }
+        console.log({ username, topic });
+    };
 
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <div>
-                    <label>Username</label>
-                    <input type="text" value={this.state.username} onChange={this.handleUsernameChange} />
-                </div>
-                <div>
-                    <select value={this.state.topic} onChange={this.handleTopicChange}>
-                        <option value='vue'>Vuejs</option>
-                        <option value='react'>ReactJs</option>
-                        <option value='angular'>Angular</option>
-                    </select>
-                    </div>
-                    <p>
-                        <button>Submit</button>
-                    </p>
-                <p>{this.state.username}</p>
-                <p>{this.state.topic}</p>
-            </form>
-        )
-    }
-}
+    return (
+        <form onSubmit={handleSubmit}>
+            <div>
+                <label>Username</label>
+                <input type="text" value={username} onChange={handleUsernameChange} />
+            </div>
+            <div>
+                <select value={topic} onChange={handleTopicChange}>
+                    <option value='vue'>Vuejs</option>
+                    <option value='react'>ReactJs</option>
+                    <option value='angular'>Angular</option>
+                </select>
+            </div>
+            <p>
+                <button>Submit</button>
+            </p>
+            <p>{username}</p>
+            <p>{topic}</p>
+        </form>
+    );
+};
 
-export default Form
+export default Form;
+
 ```
 
 Function component
