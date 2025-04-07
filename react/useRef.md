@@ -1,6 +1,6 @@
 Calculate render count using `useRef`
 
-```
+```ts
 import React, { useState, useRef, useEffect } from 'react';
 
 export default function App() {
@@ -31,7 +31,7 @@ export default function App() {
 If we try to use `useState` for keeping render count in state, we will get infinite loop. Because to listen all changes we must to use `useEffect` without deps and 
 inside useEffect we update the state which will trigger `useEffect` again
 
-```
+```ts
 // this is wrong
 const [count, setCount] = useState(0);
   useEffect(() => {
@@ -43,7 +43,7 @@ const [count, setCount] = useState(0);
 
 ### Focusing input
 
-```
+```ts
 import React, { useState, useRef } from 'react';
 
 export default function InputEl() {
@@ -76,7 +76,7 @@ export default function InputEl() {
 Ref forwarding is a technique for automatically passing a ref through a component to one of its children
 
 Create wrapper component for input
-```
+```ts
 import React from 'react';
 
 const CustomInput = (props, ref) => {
@@ -99,7 +99,7 @@ Usage
     </div>
 ```
 Now everything is works as before except `ref`. To pass ref to child component - CustomInput we must use `React.forwardRef`
-```
+```ts
 import React from 'react';
 
 const CustomInput = React.forwardRef((props, ref) => {
