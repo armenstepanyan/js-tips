@@ -28,30 +28,25 @@ Next, we create a component where the dynamic loading will occur. This component
 
 
 ```ts
-import { Component, ViewChild, ViewContainerRef, ComponentFactoryResolver } from '@angular/core';
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
 import { DynamicComponent } from './dynamic.component';
 
 @Component({
   selector: 'app-dynamic-loader',
+  standalone: true,
   template: `
     <button (click)="loadComponent()">Load Dynamic Component</button>
     <ng-template #dynamicContainer></ng-template>
-  `
+  `,
 })
 export class DynamicLoaderComponent {
-  @ViewChild('dynamicContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
-
-  constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
+  @ViewChild('dynamicContainer', { read: ViewContainerRef })
+  container!: ViewContainerRef;
 
   loadComponent() {
-    // Clear any previously loaded components
     this.container.clear();
-
-    // Create a factory for the dynamic component
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(DynamicComponent);
-
-    // Dynamically create the component
-    const componentRef = this.container.createComponent(componentFactory);
+    const ref = this.container.createComponent(DynamicComponent);
+    ref.setInput('message', 'Test');
   }
 }
 ```
@@ -61,9 +56,7 @@ export class DynamicLoaderComponent {
 - `@ViewChild('dynamicContainer', { read: ViewContainerRef })`: This decorator gives us access to the ng-template reference in the template.
 
 - `this.container.clear()`: Clears any previously inserted components from the container.
-
-- `this.componentFactoryResolver.resolveComponentFactory(DynamicComponent)`: Resolves the component's factory, which can be used to dynamically create an instance of the component.
-
+-  `setInput()`: assign values to the component's `@Input()` properties. This method is available on the component reference (componentRef).
 - `this.container.createComponent(componentFactory)`: Dynamically creates and inserts the component into the container.
 
 **3. Add the Dynamic Component to the Module**
@@ -86,3 +79,29 @@ export class App {
 
 ```
 
+### Passing Input data
+
+```ts
+import { Component, ViewChild, ViewContainerRef } from '@angular/core';
+import { DynamicComponent } from './dynamic.component';
+
+@Component({
+  selector: 'app-dynamic-loader',
+  standalone: true,
+  template: `
+    <button (click)="loadComponent()">Load Dynamic Component</button>
+    <ng-template #dynamicContainer></ng-template>
+  `,
+})
+export class DynamicLoaderComponent {
+  @ViewChild('dynamicContainer', { read: ViewContainerRef })
+  container!: ViewContainerRef;
+
+  loadComponent() {
+    this.container.clear();
+    const ref = this.container.createComponent(DynamicComponent);
+    ref.setInput('message', 'Test');
+  }
+}
+
+```
