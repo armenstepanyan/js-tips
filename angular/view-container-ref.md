@@ -23,6 +23,7 @@ export class DynamicComponent {}
 ```
 
 **2. Create a Host Component to Load the Dynamic Component**
+
 Next, we create a component where the dynamic loading will occur. This component will contain the logic to load the DynamicComponent
 
 
@@ -38,7 +39,7 @@ import { DynamicComponent } from './dynamic.component';
   `
 })
 export class DynamicLoaderComponent {
-  @ViewChild('dynamicContainer', { read: ViewContainerRef }) container: ViewContainerRef;
+  @ViewChild('dynamicContainer', { read: ViewContainerRef }) container!: ViewContainerRef;
 
   constructor(private componentFactoryResolver: ComponentFactoryResolver) {}
 
@@ -51,9 +52,6 @@ export class DynamicLoaderComponent {
 
     // Dynamically create the component
     const componentRef = this.container.createComponent(componentFactory);
-
-    // Optionally, you can pass data to the dynamically created component
-    // componentRef.instance.someInput = 'some data';
   }
 }
 ```
@@ -72,21 +70,19 @@ export class DynamicLoaderComponent {
 Make sure that the DynamicComponent is declared in the AppModule (or any module you're using), as it needs to be compiled ahead of time.
 
 ```ts
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { DynamicLoaderComponent } from './dynamic-loader.component';
-import { DynamicComponent } from './dynamic.component';
-
-@NgModule({
-  declarations: [
-    DynamicLoaderComponent,
-    DynamicComponent
-  ],
-  imports: [BrowserModule],
-  bootstrap: [DynamicLoaderComponent],
-  entryComponents: [DynamicComponent]  // Add dynamically loaded components here
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [DynamicLoaderComponent, DynamicComponent],
+  template: `
+    <h1>Hello from {{ name }}!</h1>
+    <app-dynamic-loader></app-dynamic-loader>
+    
+  `,
 })
-export class AppModule {}
+export class App {
+  name = 'Angular';
+}
 
 ```
 
