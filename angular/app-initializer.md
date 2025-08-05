@@ -130,7 +130,17 @@ export class MyService {
   }
 }
 
+```
 
+### Updated version
+`provideAppInitializer` is an Angular function introduced in Angular 19 that replaces the deprecated APP_INITIALIZER token. It serves the purpose of allowing developers to define and execute functions during the application's startup phase, before the main application component loads.
+```ts
+providers: [
+  provideAppInitializer(() => {
+    const myService = inject(MyService);
+    return myService.init()
+  })
+]
 ```
 
 
