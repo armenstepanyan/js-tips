@@ -62,6 +62,8 @@ Session/Cookie → Best for classic web apps where the client is always a browse
 
 JWT → Best for APIs, mobile apps, microservices, or when you need stateless, distributed authentication.
 
+[JWT Example NodeJS Express](https://github.com/armenstepanyan/jwt-node)
+
 ### Simple Example
 ```ts
 const jwt = require('jsonwebtoken');
