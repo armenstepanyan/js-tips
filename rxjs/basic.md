@@ -15,7 +15,7 @@ The essential concepts in RxJS which solve async event management are:
 
 ### Observables
 Observables are lazy Push collections of multiple values. 
-```
+```ts
 import { Observable } from 'rxjs';
 
 const observable = new Observable(subscriber => {
@@ -38,7 +38,7 @@ console.log('just after subscribe');
 ```
 
 Output
-```
+```ts
 just before subscribe
 got value 1
 got value 2
@@ -48,7 +48,7 @@ got value 4
 done
 ```
 Observables are like functions with zero arguments, but generalize those to allow multiple values.
-```
+```ts
 function foo() {
   console.log('Hello');
   return 42;
@@ -61,7 +61,7 @@ console.log(y);
 ```
 
 Subscribing to an Observable is analogous to **calling** a Function.
-```
+```ts
 console.log('before');
 console.log(foo.call());
 console.log('after');
@@ -86,14 +86,14 @@ Conclusion:
 ### Observer
  An Observer is a consumer of values delivered by an Observable. 
  Observers are simply a set of callbacks, one for each type of notification delivered by the Observable: `next`, `error`, and `complete`
- ```
+ ```ts
  const observer = {
   next: x => console.log('Observer got a next value: ' + x),
   error: err => console.error('Observer got an error: ' + err),
   complete: () => console.log('Observer got a complete notification'),
 };
 observable.subscribe(observer);
- ```
+ ```ts
 ### Subscription
 A Subscription is an object that represents a disposable resource, usually the execution of an Observable. 
 A Subscription has one important method, **unsubscribe**, that takes no argument and just disposes the resource held by the subscription
@@ -103,7 +103,7 @@ An RxJS **Subject** is a special type of Observable that allows values to be mul
 While plain Observables are **unicast** (each subscribed Observer owns an independent execution of the Observable), Subjects are **multicast**.
 
 **Observable**
-```
+```ts
 import { Observable } from 'rxjs';
 
 let obs = Observable.create(observer=>{
@@ -120,7 +120,7 @@ obs.subscribe(res=>{
 ```
 
 **Subject**
-```
+```ts
 import {Subject} from 'rxjs';
 
 let obs = new Subject();
@@ -140,7 +140,7 @@ obs.next(Math.random());
 One of the variants of Subjects is the BehaviorSubject, which has a notion of `the current value`. 
 It stores the latest value emitted to its consumers, and whenever a new Observer subscribes, 
 it will **immediately** receive the "current value" from the BehaviorSubject.
-```
+```ts
 import { BehaviorSubject } from 'rxjs';
 const subject = new BehaviorSubject(0); // 0 is the initial value
 
@@ -162,7 +162,7 @@ console.log(subject.value);
 ```
 Output
 First value will be **initial/last emitted** value of BehaviorSubject
-```
+```ts
 observerA: 0
 observerA: 1
 observerA: 2
@@ -176,7 +176,7 @@ observerB: 3
 ### ReplaySubject
 A ReplaySubject is similar to a BehaviorSubject in that it can send old values to new subscribers, but it can also record a part of the Observable execution.
 When creating a ReplaySubject, you can specify how many values to replay:
-```
+```ts
 import { ReplaySubject} from 'rxjs';
 const subject = new ReplaySubject(3); // buffer 3 values for new subscribers
 
@@ -196,7 +196,7 @@ subject.subscribe({
 subject.next(5);
 ```
 Output
-```
+```ts
 observerA: 10
 observerA: 20
 observerA: 30
@@ -210,7 +210,7 @@ observerA: 5
 observerB: 5
 ```
 Same example with `BehaviorSubject`
-```
+```ts
 import { ReplaySubject, BehaviorSubject} from 'rxjs';
 const subject = new BehaviorSubject(3); // buffer 3 values for new subscribers
 
@@ -230,7 +230,7 @@ subject.subscribe({
 subject.next(5);
 ```
 Output
-```
+```ts
 observerA: 3
 observerA: 10
 observerA: 20
@@ -245,7 +245,7 @@ observerB: 5
 
 ### AsyncSubject
 The AsyncSubject is a variant where only the last value of the Observable execution is sent to its observers, and only when the execution completes.
-```
+```ts
 import { AsyncSubject } from 'rxjs';
 const subject = new AsyncSubject();
 
@@ -278,7 +278,7 @@ Cold Observables start to emit values only when we subscribe to them. Hot ones e
 
 Cold Observables are unicast, and Hot Observables are multicast (share value between multiple subscribes).
 
-```typescript
+```ts
 // create cold Observable
 const obs$ = of(null).pipe(map(() => Math.random()));
 obs$.subscribe(console.log);  // 0.2689673282776057
@@ -287,7 +287,7 @@ obs$.subscribe(console.log);  // 0.9868565543832466
 ```
 Now `Math.random()` will be executed for all subscribers separately.
 
-```typescript
+```ts
 const fromTimestamp = (): Observable<number> => {
   return new Observable((subscriber) => {
     // Cold Observable: each subscriber will receive diferent value
@@ -334,3 +334,63 @@ Now the request will be sent 2 times. To fix this we can share data with `shareR
 ```typescript
 this.posts$ = this.http.get<any>(url).pipe(shareReplay());
 ```
+
+#### switchMap
+- Cancels previous inner Observable when a new one comes. 
+- Keeps only the latest
+
+```ts
+searchControl.valueChanges
+  .pipe(
+    debounceTime(300),
+    switchMap(query => this.http.get(`/api/search?q=${query}`))
+  )
+  .subscribe(results => this.results = results);
+```
+If the user types fast, only the latest HTTP call is used, previous ones are cancelled.
+
+#### mergeMap
+- Subscribes to all inner Observables simultaneously.
+- Results come in as they complete.
+
+✅ Use Case: Fire multiple requests in parallel
+```ts
+from([1, 2, 3])
+  .pipe(
+    mergeMap(id => this.http.get(`/api/items/${id}`))
+  )
+  .subscribe(result => console.log(result));
+```
+All three HTTP requests are made at the **same time**, results may come in **any order**.
+
+#### concatMap
+- Queues inner Observables.
+- Executes **one at a time**, in order
+- 
+✅ Use Case: Save steps in a sequence (e.g., Step 1 → Step 2 → Step 3)
+```ts
+from([1, 2, 3])
+  .pipe(
+    concatMap(id => this.http.post(`/api/process/${id}`, {}))
+  )
+  .subscribe(result => console.log(result));
+
+```
+Each request is sent **after** the previous one completes.
+
+#### exhaustMap
+Ignores **new emissions** until the current one completes.
+
+✅ Use Case: Prevent double submission (e.g., login form)
+
+```ts
+loginClick$
+  .pipe(
+    exhaustMap(() => this.http.post('/api/login', this.form.value))
+  )
+  .subscribe(response => console.log('Logged in!', response));
+
+```
+If the user clicks "Login" multiple times quickly, only the first click will trigger a request.
+
+
