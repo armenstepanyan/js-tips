@@ -2,7 +2,7 @@
 
 This operator is best used when you wish to flatten an inner observable but want to manually control the number of inner subscriptions
 
-```
+```ts
 const name$ = fromEvent(document.getElementById('name'), 'input');
 const lastname$ = fromEvent(document.getElementById('lastname'), 'input');
 
