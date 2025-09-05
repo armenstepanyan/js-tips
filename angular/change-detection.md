@@ -231,4 +231,152 @@ There are two types of change detection:
 - Angular event was fired.  `(click)="onClickHandle()"`
 - Manual trigering: `this.ref.detectChanges()`
 
+### Change Detection
+✅ ChangeDetectionStrategy.Default
+
+- Angular checks the component on every change detection cycle.
+
+- This includes changes from:
+
+- Timer (setTimeout)
+
+  - HTTP responses
+
+  - DOM events
+
+  - Service updates
+
+  - Anything async
+
+✅ ChangeDetectionStrategy.OnPush
+
+- Angular will only check the component when:
+
+- An @Input() reference changes
+
+- A DOM event is triggered inside the component
+
+- You manually call:
+
+  - ChangeDetectorRef.markForCheck()
+
+  - detectChanges()
+ 
+  #### Example Scenario:
+```ts
+@Component({
+  selector: 'app-example',
+  template: `
+    <div>{{ counter }}</div>
+    <button (click)="increment()">Increment</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ExampleComponent {
+  counter = 0;
+
+  increment() {
+    this.counter++; // Primitive update inside component
+  }
+}
+ ```
+
+**Will this update the UI?**
+
+✅ Yes, because of the (click) event, which is an event inside the component — it triggers change detection automatically.
+
+🔄 Now, what if you update something outside the component (like from a service or setTimeout)?
+
+```ts
+ngOnInit() {
+  setTimeout(() => {
+    this.counter++; // Primitive value change
+  }, 1000);
+}
+```
+
+**Will the UI update?**
+
+❌ No, because Angular (with OnPush) does not check this component unless it knows something changed.
+
+Even though `counter++` changes the value, the reference doesn’t change, and Angular doesn’t know to check the component.
+
+✅ How to Force CD in OnPush
+
+Use ChangeDetectorRef:
+
+```ts
+constructor(private cdr: ChangeDetectorRef) {}
+
+ngOnInit() {
+  setTimeout(() => {
+    this.counter++;
+    this.cdr.markForCheck(); // ✅ triggers CD manually
+  }, 1000);
+}
+
+```
+
+#### Summary
+With OnPush, Angular optimizes by skipping CD unless inputs change by reference or internal events occur. If I mutate a primitive or an array without changing its reference, the template won't update unless I manually trigger CD. 
+That's why immutability and reference updates are critical in OnPush components.
+
+#### OnPush in the parent and Default in the child
+Scenario:
+
+- Parent component uses `ChangeDetectionStrategy.OnPush`
+- Child component uses `default` change detection
+- We update a primitive value inside the child after a setTimeout
+
+```ts
+// parent.component.ts
+@Component({
+  selector: 'app-parent',
+  template: `
+    <h2>Parent (OnPush)</h2>
+    <app-child></app-child>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+export class ParentComponent {}
+
+```
+Child class
+
+```ts
+// child.component.ts
+@Component({
+  selector: 'app-child',
+  template: `
+    <h3>Child (Default)</h3>
+    <p>Counter: {{ counter }}</p>
+  `
+  // default change detection, so no changeDetection config here
+})
+export class ChildComponent implements OnInit {
+  counter = 0;
+
+  ngOnInit() {
+    setTimeout(() => {
+      this.counter++;
+      console.log('Child counter updated:', this.counter);
+      // No manual change detection call here
+    }, 1000);
+  }
+}
+
+```
+
+#### What will happen?
+1. Angular runs change detection top-down starting from the root component or the component that triggered the CD cycle.
+2. When the parent is `OnPush`, Angular will only run change detection on the parent and its subtree if:
+
+    - An input to the parent changes by reference,
+    - An event is fired inside the parent or its subtree,
+    -  Or CD is triggered manually (e.g., via markForCheck).
+
+3. Since the parent is `OnPush`, if none of the above happen, Angular will **NOT run change detection** for the parent or any of its children (because CD runs from the top).
+4. Even though the child has default CD, it only runs if change detection runs for it, which only happens if the parent triggers CD.
+
+
 
