@@ -138,3 +138,78 @@ Concrete Classes:
 - User Class: This class depends on the Storage abstract class. The actual storage implementation is injected into the User class via the constructor.
 
 **Main Logic**: In main.js, you can choose which storage implementation to use by setting the useFileStorage variable. This decision is made outside the User class, allowing for flexibility.
+
+✅ Summary
+
+Dependency Injection (DI) is a design pattern where a class receives its dependencies (services or modules it relies on) from an external source rather than creating them itself.
+
+✨ Core Principle:
+High-level modules should not depend on low-level modules. Both should depend on abstractions.
+This principle aligns with the Dependency Inversion Principle (DIP) — one of the SOLID principles of object-oriented design.
+
+```ts
+// 1. Abstraction
+interface IStorage {
+  save(data: any): void;
+  getDataById(id: string): UserData;
+}
+
+// 2. High-level module
+class User {
+  constructor(private storage: IStorage) {}
+
+  getUser(id: string) {
+    return this.storage.getDataById(id);
+  }
+
+  saveUser(data: UserData) {
+    this.storage.save(data);
+  }
+}
+
+// 3. Low-level modules
+class SaveToFile implements IStorage {
+  save(data: any): void {
+    console.log('Saving to file', data);
+    // logic to save data to a file
+  }
+
+  getDataById(id: string): UserData {
+    console.log('Getting data from file by id', id);
+    // logic to read from file
+    return { id, name: 'FromFile' }; // dummy return
+  }
+}
+
+class SaveToDB implements IStorage {
+  save(data: any): void {
+    console.log('Saving to DB', data);
+    // logic to save to DB
+  }
+
+  getDataById(id: string): UserData {
+    console.log('Getting data from DB by id', id);
+    // logic to get from DB
+    return { id, name: 'FromDB' }; // dummy return
+  }
+}
+
+// 4. Usage - Injecting the dependency
+const fileStorage = new SaveToFile();
+const dbStorage = new SaveToDB();
+
+const user1 = new User(fileStorage); // Inject file-based storage
+const user2 = new User(dbStorage);   // Inject DB-based storage
+```
+
+#### 🔍 Why This Matters
+Without dependency injection:
+
+- The `User` class would have to directly instantiate `SaveToFile` or `SaveToDB`
+- This tightly couples `User` to a specific implementation — violating Open/Closed Principle and Single Responsibility Principle.
+
+With DI:
+
+- User doesn’t care how data is saved or fetched — it just knows that some object implements IStorage.
+- You can swap out implementations without touching the `User` class — making your system more flexible and testable.
+  
