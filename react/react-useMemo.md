@@ -1,4 +1,25 @@
+### useMemo in React
+`useMemo` is a React hook that memoizes a computed value, so it's only recalculated when its dependencies change.
+Use it to avoid expensive recalculations on every render — especially when the computation doesn't need to run again unless certain values have changed.
+
+#### Syntax
+```ts
+const memoizedValue = useMemo(() => computeSomething(), [dependencies]);
+
 ```
+
+- The function inside useMemo only runs when something in the dependencies array changes.
+- Between renders, React remembers the last result.
+
+✅ Use Cases
+
+- Expensive calculations
+- Avoiding unnecessary re-renders
+- Optimizing performance in large lists or complex UIs
+
+#### Example
+
+```ts
 import React, { useState } from 'react'
 
 export default function MemoComp() {
@@ -6,6 +27,7 @@ export default function MemoComp() {
     const [number, setNumber] = useState(0);
     const [dark, setDark] = useState(false);
     const doubleNumber = slowFunction(number);
+
     const themeStyles = {
         backgroundColor: dark ? 'black' : 'white',
         color: dark ? 'white' : 'black'
@@ -31,7 +53,7 @@ function slowFunction(number) {
 
 The `doubleNumber` function will be recalculated each time when number or theme variable changes. Here we can use `useMemo` hook
 
-```
+```ts
 import React, { useState, useMemo } from 'react'
 ----
 const doubleNumber = useMemo(() => {
@@ -40,14 +62,14 @@ const doubleNumber = useMemo(() => {
 ```
 
 If we add `useEffect` and listen `themeStyles` changes, it also will be triggered when number value is changed because on every render  `themeStyles` get new reference
-```
+```ts
 useEffect(() => {
     console.log('theme changed')
 }, [themeStyles])
 ```
 
 To avoid this we can use memo also for themeStyles
-```
+```ts
 const themeStyles = useMemo(() => {
     return {
         backgroundColor: dark ? 'black' : 'white',
@@ -57,7 +79,7 @@ const themeStyles = useMemo(() => {
 ```
 
 Whole code
-```
+```ts
 import React, { useState, useMemo, useEffect } from 'react'
 
 export default function MemoComp() {
@@ -101,7 +123,7 @@ function slowFunction(number) {
 
 ### Example 2
 This component will be rendered each time when state is changed. And each time when we click on button to change style.background `const len = getTextLength(name)` will called again. We need to call `getTextLength` function only if `name` is changed.  
-```
+```ts
 import React, { useState } from 'react';
 
 function getTextLength(s: string) {
@@ -131,7 +153,7 @@ export default function Form() {
 ```
 
 Using useMemo
-```
+```ts
 export default function Form() {
   console.log('component rendered');
   const [name, setName] = useState('');
