@@ -3,7 +3,7 @@ Building your own Hooks lets you extract component logic into reusable functions
 Example of create `useFetch` custom hook that make get request to given url
 
 **useFetch.js**
-```
+```ts
 import { useState, useEffect } from 'react';
 
 const useFetch = (url, initialData) => {
@@ -36,7 +36,7 @@ export default useFetch;
 ```
 
 Usage in App.js
-```
+```ts
 import useFetch from './useFetch';
 
 export default function App() {
