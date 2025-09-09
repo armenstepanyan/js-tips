@@ -203,6 +203,47 @@ var log = () => {
 var d = new log(); // Uncaught TypeError: log is not a constructor
 ```
 
+#### ✅ Creating Debounce function
+A debounce function is used to limit how often a function is called, especially useful for optimizing performance during events like typing, resizing, or scrolling.
+
+Imagine you want a search function to run only after a user stops typing for 300ms, not every keystroke. That’s where debouncing helps.
+
+```ts
+function debounce(func, delay) {
+  let timeoutId;
+
+  return function (...args) {
+    const context = this;
+
+    clearTimeout(timeoutId); // Clear previous timer
+    timeoutId = setTimeout(() => {
+      func.apply(context, args); // Call the function after the delay
+    }, delay);
+  };
+}
+
+```
+
+📌 How to Use It
+```ts
+function handleInput(event) {
+  console.log('Input value:', event.target.value);
+}
+
+const debouncedInput = debounce(handleInput, 300);
+
+document.getElementById('myInput').addEventListener('input', debouncedInput);
+
+```
+
+Key Concepts:
+
+- `clearTimeout(timeoutId)` ensures the function is only called after the last event.
+
+- `setTimeout(...)` delays execution.
+
+- `.apply(context, args)` keeps this and arguments intact.
+
 ### Call/apply/bind
 The main concept behind all this methods is **Function burrowing**. 
 Function borrowing allows us to use the methods of one object on a different object without having to make a copy of that method and maintain it in two separate places.
