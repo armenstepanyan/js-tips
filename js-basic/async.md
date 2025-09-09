@@ -80,7 +80,7 @@ async function sum2(val) {
   console.log("b calculated");
   return val + a + b;
 }
-```ts
+```
 
 For function `sum1` after 3 second (max of 2 promises) we will see total result
 ```ts
