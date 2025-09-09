@@ -1,7 +1,7 @@
 ### Hoisting
 
 Hoisting is JavaScript's default behavior of moving declarations to the top
-```
+```ts
 x = 5; // Assign 5 to x
 
 console.log(x);
@@ -12,7 +12,7 @@ var x // declare x (x  is undefined)
 Variables defined with **let** and **const** are hoisted to the top of the block, but not `initialized`
 Using a let variable before it is declared will result in a **ReferenceError**
 
-```
+```ts
 x = 15;
 let x;
 // Uncaught ReferenceError: Cannot access 'x' before initialization
@@ -21,21 +21,21 @@ let x;
 ### JavaScript Initializations are Not Hoisted
 JavaScript only hoists declarations, not initializations
 
-```
+```ts
 var x = 5; // Declare and Initialize x
 console.log(x) // 5
 ```
 
 Initialization will not be hoisted
 
-```
+```ts
 console.log(y); // undefined
 var y = 5; // Initialize y 
 ```
 ### Strict mode
 JavaScript in strict mode does not allow variables to be used if they are not declared
 
-```
+```ts
 for (let i=0; i<10; i++) {
 	console.log( i );
 }
@@ -44,7 +44,7 @@ console.log( i ); // ReferenceError
 ```
 
 Throw SyntaxError for re-declaration due to `var` being hoisted to the top of the block.
-```
+```ts
 let x = 1;
 
 {
@@ -53,7 +53,7 @@ let x = 1;
 ```
 
 In switch statement if there is no block it will throw an error
-```
+```ts
 let x = 1;
 switch(x) {
   case 0:
@@ -66,7 +66,7 @@ switch(x) {
 }
 ```
 However, it's important to point out that a block nested inside a case clause will create a new block scoped lexical environment, which will not produce the redeclaration errors shown above
-```
+```ts
 let x = 1;
 
 switch(x) {
@@ -82,7 +82,7 @@ switch(x) {
 
 ```
 **Note:** Just like `const` the `let` does not create properties of the `window` object when declared globally (in the top-most scope).
-```
+```ts
 var a = 15;
 window.a // 15
 
@@ -97,7 +97,7 @@ While inside the TDZ, the variable has not been initialized with a value, and an
 
 This differs from var variables, which will return a value of undefined if they are accessed before they are declared. The code below demonstrates the different result when let and var are accessed in code before the line in which the are declared.
 
-```
+```ts
 { 
   // TDZ starts at beginning of scope
   console.log(bar); // undefined
@@ -108,7 +108,7 @@ This differs from var variables, which will return a value of undefined if they 
 ```
 
 The term "temporal" is used because the zone depends on the order of execution (time) rather than the order in which the code is written (position). For example, the code below works because, even though the function that uses the let variable appears before the variable is declared, the function is called outside the TDZ
-```
+```ts
 {
     // TDZ starts at beginning of scope
     const func = () => console.log(letVar); // OK
@@ -122,7 +122,7 @@ The term "temporal" is used because the zone depends on the order of execution (
 ```
 
 The following code results in a ReferenceError at the line shown:
-```
+```ts
 function test(){
    var foo = 33;
    if(foo) {
@@ -139,7 +139,7 @@ The expression `(foo + 55)` throws a ReferenceError because initialization of `l
 ### Arrow functions
 - has no own this
 
-```
+```ts
 let group = {
   title: "Our Group",
   students: ["John", "Pete", "Alice"],
@@ -160,14 +160,14 @@ let group = {
 ```
 
 - has no `arguments`
-```
+```ts
 const log = () => {
   console.log(arguments) // Uncaught ReferenceError: arguments is not defined
 }
 ```
 
 This can be useful when we need to create defered function
-```
+```ts
 function defer(f, ms) {
   return function() {
     setTimeout(() => f.apply(this, arguments), ms)
@@ -183,7 +183,7 @@ sayHiDeferred("John");  // Hello, John after 2 seconds
 ```
 
 Same example without arrow function
-```
+```ts
 function defer(f, ms) {
   return function(...args) { // <--- keep arg here
     let ctx = this; // <-- keep context
@@ -195,7 +195,7 @@ function defer(f, ms) {
 ```
 
 - cannot be called with `new` keyword
-```
+```ts
 var log = () => {
   console.log('works')
 }
@@ -211,7 +211,7 @@ Function borrowing allows us to use the methods of one object on a different obj
 - **Bind** returns a new function, and you can invoke/call it anytime you want by invoking a function.
 
 **call** attaches **this** into function and executes the function immediately:
-```
+```ts
 var person = {  
   name: "James Smith",
   hello: function(thing) {
@@ -223,11 +223,11 @@ person.hello("world");  // output: "James Smith says hello world"
 person.hello.call({ name: 'John Doe' }, 'world') // output: "John Doe says hello world"
 ```
 Same example with **apply**
-```
+```ts
 person.hello.apply({ name: 'John Doe' }, ['world'])
 ```
 **bind** attaches **this** into function and it needs to be invoked separately:
-```
+```ts
 person.hello("world");  // output: "James Smith says hello world"
 var helloFunc = person.hello.bind({ name: "John Doe" });
 helloFunc("world");  // output: John Doe says hello world"
@@ -253,7 +253,7 @@ As the name suggests, IIFEs can be created using function expression.
 Another  difference between a function expression and a function declaration is the **function name**, which can be omitted in function expressions to create anonymous functions.
  The variable to which the function expression is assigned will have a `name` property. The name doesn't change if it's assigned to a different variable. 
  If function name is omitted, it will be the variable name (implicit name).  If function name is present, it will be the function name (explicit name).
-  ```
+```ts
 const foo = function () {};
 foo.name // "foo"
 
@@ -264,7 +264,7 @@ foo2.name = "another name";
 foo2.name // foo, name is unchangeable
  ```
  With named function
- ```
+ ```ts
 const bar = function baz() {};
 bar.name // "baz"
 
@@ -275,14 +275,14 @@ console.log(bar === baz); // false (errors because baz == undefined)
  
  ### AsyncFunction
  In JavaScript, every asynchronous function is actually an `AsyncFunction` object.
- ```
+ ```ts
  async function a(){
     return await 1;
 }
 a.constructor.name // AsyncFunction
  ```
  Create function using `AsyncFunction` constructor
- ```
+ ```ts
  const AsyncFunction = (async function () {}).constructor;
  const fn = new AsyncFunction(
   'a',
