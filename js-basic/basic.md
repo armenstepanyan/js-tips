@@ -213,14 +213,14 @@ function debounce(func, delay) {
   let timeoutId;
 
   return function (...args) {
-    const context = this;
+    clearTimeout(timeoutId);
 
-    clearTimeout(timeoutId); // Clear previous timer
     timeoutId = setTimeout(() => {
-      func.apply(context, args); // Call the function after the delay
+      func.apply(this, args);
     }, delay);
   };
 }
+
 
 ```
 
