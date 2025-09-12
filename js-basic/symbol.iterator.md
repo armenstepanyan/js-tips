@@ -1,7 +1,10 @@
 ### Symbol.iterator
+`Symbol.iterator` is a built-in symbol in JavaScript that defines the default iterator for an object. It allows an object to be iterated with `for...of` loops or other constructs that expect iterable values (like the spread operator `[...obj]` or `Array.from()`).
+
+To make a custom object iterable, you can define a method using the `Symbol.iterator` key that returns an iterator object — an object with a `next()` method.
 
 Call iterator of string type (String.prototype has own iterator)
-```
+```ts
 const rangeIterator = '0123456789'[Symbol.iterator]();
 console.log(rangeIterator.next()); // {value: "0", done: false}
 console.log(rangeIterator.next()); // {value: "1", done: false}
@@ -11,7 +14,7 @@ console.log(rangeIterator.next()); // {value: "9", done: false}
 console.log(rangeIterator.next()); // {done: true}
 ```
 
-```
+```ts
 Iterable {
   [Symbol.iterator](): Iterator 
 }
@@ -28,7 +31,7 @@ IResultObj {
 ```
 
 ### Create simple iterator
-```
+```ts
 const iterable = [1,2,3];
 
 function createInterator(array) {
@@ -50,7 +53,7 @@ console.log( myIterator.next() );  // { done: true, value: undefined }
 ```
 
 ### Object iterator
-```
+```ts
 const person = {
   name: 'John',
   lastName: 'Doe',
@@ -82,7 +85,7 @@ for(let p of person) {
 
 
 ### Object iterator by keys
-```
+```ts
 const myIterable = {
   a: 1,
   b: 2,
@@ -112,7 +115,7 @@ for(let [k, v] of myIterable) {
 
 
 ### Create range iterator
-```
+```ts
 let range = {
   from: 1,
   to: 5
@@ -149,7 +152,7 @@ for (let num of range) {
 - Instead, another object, a so-called “iterator” is created by the call to `range[Symbol.iterator]()`, and its next() generates values for the iteration.
 
 
-```
+```ts
 var myIterable = {}
 myIterable[Symbol.iterator] = function* () {
     yield 1;
@@ -161,7 +164,7 @@ myIterable[Symbol.iterator] = function* () {
 
 Technically, we may merge them and use range itself as the iterator to make the code simpler. Like this:
 
-```
+```ts
 let range = {
   from: 1,
   to: 5,
@@ -187,7 +190,7 @@ for (let num of range) {
 
 
 ### Iterator for class
-```
+```ts
 class Route {
 
  constructor(stations) {
@@ -236,7 +239,7 @@ for (let item of route) {
 
 Output
 
-```
+```js
 "Moscow" 
 "New York" 
 "London" 
