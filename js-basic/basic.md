@@ -1,6 +1,12 @@
 ### Hoisting
 
-Hoisting is JavaScript's default behavior of moving declarations to the top
+Hoisting is JavaScript's default behavior of moving declarations to the top. Hoisting means that JavaScript moves declarations (not assignments) to the top of their scope (global scope or function scope) before code execution.
+This happens during the creation phase of the execution context (before running your code line by line).
+
+- Declarations: `var x;, let y;, const z;`, and function declarations.
+
+- Initializations/Assignments: `x = 5;, y = 10;` → these stay where they are.
+
 ```ts
 x = 5; // Assign 5 to x
 
@@ -8,6 +14,29 @@ console.log(x);
 
 var x // declare x (x  is undefined)
 ```
+
+What JavaScript actually does under the hood:
+```ts
+
+var x;        // Hoisted to the top → initialized as undefined
+x = 5;        // Assignment stays in place
+console.log(x); // 5
+
+```
+
+Another example:
+```ts
+console.log(y); // undefined
+var y = 5;
+```
+
+Internally:
+```ts
+var y;           // hoisted, y = undefined
+console.log(y);  // undefined
+y = 5;           // assignment happens here
+```
+That’s why with var you can "use" the variable before declaration, but it will be undefined.
 
 Variables defined with **let** and **const** are hoisted to the top of the block, but not `initialized`
 Using a let variable before it is declared will result in a **ReferenceError**
@@ -17,6 +46,19 @@ x = 15;
 let x;
 // Uncaught ReferenceError: Cannot access 'x' before initialization
 ```
+
+What happens internally:
+```ts
+// a is hoisted, but not initialized → TDZ
+console.log(a); // ReferenceError
+a = 10;         // Initialization happens here
+
+```
+
+let and const hoisting: 
+- They are also hoisted (moved to the top of their block).
+- But unlike var, they are not initialized automatically.
+- They stay in a Temporal Dead Zone (TDZ) from the start of the block until the actual line where they’re declared.
 
 ### JavaScript Initializations are Not Hoisted
 JavaScript only hoists declarations, not initializations
@@ -32,6 +74,16 @@ Initialization will not be hoisted
 console.log(y); // undefined
 var y = 5; // Initialize y 
 ```
+
+🔹 Key difference: var vs let/const
+| Feature               | `var`         | `let` / `const`           |
+| --------------------- | ------------- | ------------------------- |
+| Hoisted?              | ✅ Yes         | ✅ Yes                     |
+| Initialized at start? | ✅ `undefined` | ❌ No (TDZ)                |
+| Scope                 | Function      | Block                     |
+| Re-declaration        | Allowed       | Not allowed in same scope |
+
+
 ### Strict mode
 JavaScript in strict mode does not allow variables to be used if they are not declared
 
