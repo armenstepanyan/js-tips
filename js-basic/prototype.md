@@ -2,9 +2,11 @@
 
 Prototype inheritance is the mechanism in JavaScript where objects inherit properties and methods from other objects through a prototype chain.
 
+A prototype is an object from which another object inherits properties and methods. When accessing a property, JavaScript checks the object first; if it doesn’t exist, it searches up the prototype chain until it finds the property or reaches null. Prototypes enable memory-efficient shared methods and dynamic inheritance.
+
 - Every JavaScript object has an internal [[Prototype]] (accessible via __proto__), which points to another object.
 - If a property or method is not found on the object itself, JavaScript looks for it in its prototype chain.
-- Functions have a .prototype property, which is used to set the [[Prototype]] of new objects when created using the new keyword.
+- Functions have a `.prototype` property, which is used to set the `[[Prototype]]` of new objects when created using the new keyword.
 - Shared methods and properties are typically added to the constructor function’s .prototype, so all instances can access them.
 
 ```ts
@@ -77,6 +79,13 @@ const user = new Person("Alice");
 user.sayHello(); // Hello, I'm Alice
 
 ```
+Every object has a __proto__ property (also accessible via Object.getPrototypeOf(obj) — preferred)
+
+```ts
+console.log(user.__proto__ === Person.prototype); // true
+console.log(user.__proto__.__proto__ === Object.prototype); // true
+
+```
 
 - user is created using new Person(...)
 - It gets its own name property.
@@ -96,4 +105,25 @@ arr.sayHello(); // "Hello from array"
 ```
 
 You can also set up inheritance between objects using Object.create() or Object.setPrototypeOf(), though direct use of __proto__ is discouraged.
+
+#### Creating a object without a prototype
+n JavaScript, creating an object without a prototype means that the object won’t inherit properties or methods from Object.prototype (like .toString() or .hasOwnProperty()).
+You can do this using Object.create(null)
+
+```ts
+// Create an object with no prototype
+const obj = Object.create(null);
+
+// Add properties
+obj.name = "Alice";
+obj.age = 25;
+
+console.log(obj); // { name: 'Alice', age: 25 }
+
+// Note: methods like toString are not available
+console.log(obj.toString); // undefined
+
+// You can still safely use it as a pure dictionary
+console.log(obj['name']); // Alice
+```
 
