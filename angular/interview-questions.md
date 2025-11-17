@@ -125,3 +125,7 @@ This avoids cluttering the root module and keeps things modular.
 Services in shared modules may create multiple instances if imported in multiple modules. Singleton services belong in Core Module.
 4. No routing
 Shared modules are purely for reusable pieces — they don’t define routes.
+
+### 4. What is Prototpye inheritance in JS
+In JavaScript, every object has a prototype, which is another object it can inherit properties and methods from. Functions have a prototype property that defines what their instances will inherit, while each object has a __proto__ property that points to its prototype. This system, called prototype inheritance, allows objects to share functionality efficiently, so if a property or method isn’t found on an object, JavaScript looks up the prototype chain to find it.
+[Read More](https://github.com/armenstepanyan/js-tips/blob/master/js-basic/prototype.md)
