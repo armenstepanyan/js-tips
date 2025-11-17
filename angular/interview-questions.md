@@ -1,27 +1,27 @@
 ### 1. What is @Injectable in Angular and what happens if we mark a service class with or without @Injectable?
 In Angular, `@Injectable` is a decorator used to indicate that a class can be injected as a dependency into other classes using Angular's dependency injection system. It is especially relevant for service classes, which often act as shared resources or provide business logic and data management.
 
-1. Key Points About @Injectable
-Purpose:
-The @Injectable decorator is used to make a class available for dependency injection. It allows Angular to instantiate the class, resolve its dependencies, and inject it wherever needed.
+#### Purpose:
 
-2. Usage:
-You typically use @Injectable on service classes that you want to provide and inject into other components, directives, or services.
+The `@Injectable` decorator is used to make a class available for dependency injection. It allows Angular to instantiate the class, resolve its dependencies, and inject it wherever needed.
 
-3. Providing Dependencies:
-By marking a class with @Injectable, you can specify whether the class should be provided in a specific module, component, or the root injector (providedIn: 'root').
+#### Usage:
+You typically use`@Injectable` on service classes that you want to provide and inject into other components, directives, or services.
+
+#### Providing Dependencies:
+By marking a class with`@Injectable`, you can specify whether the class should be provided in a specific module, component, or the root injector (providedIn: 'root').
 
 #### What Happens When You Mark a Service Class with @Injectable
-- Dependency Injection:
+- **Dependency Injection:**
 Angular can inject the service into other classes (components, directives, etc.) because the @Injectable decorator registers the class with the Angular dependency injection system.
 
-- Resolving Dependencies:
+- **Resolving Dependencies:**
 If the service itself depends on other services or resources, Angular can resolve those dependencies for it.
 
-- Tree-Shakable Providers:
-If providedIn: 'root' is specified in the @Injectable decorator, Angular ensures that the service is tree-shakable. It will only be included in the compiled JavaScript bundle if it's actually used in the application.
+- **Tree-Shakable Providers:**
+If `providedIn: 'root'` is specified in the `@Injectable` decorator, Angular ensures that the service is tree-shakable. It will only be included in the compiled JavaScript bundle if it's actually used in the application.
 
-- Scoped Providers:
+- **Scoped Providers:**
 You can also specify providedIn to limit the scope of the service to a specific module or lazily loaded feature module.
 
 #### What Happens If You Don't Use @Injectable
@@ -46,8 +46,7 @@ export class ExampleComponent {
 }
 ```
 2. Manual Instantiation:
-
-If you don't use `@Injectable`, you would need to manually instantiate the service class wherever you need it, which defeats the purpose of Angular's dependency injection system.
+ If you don't use `@Injectable`, you would need to manually instantiate the service class wherever you need it, which defeats the purpose of Angular's dependency injection system.
 
 3. Dependency Resolution Issues:
 If the service class has its own dependencies (e.g., it depends on another service), Angular won't be able to resolve them.
