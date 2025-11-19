@@ -139,9 +139,28 @@ Usage [Example on Stackblitz](https://stackblitz.com/edit/t-promise?embed=1&file
         console.log("Reject: ", error);
       }
     )
-    .catch(error => {
-      console.log("Catch error: ", error);
-    });
+```
+
+Handling rejection with `.catch()`:
+
+```ts
+loadScript(url)
+  .then(result => console.log("Success:", result))
+  .catch(error => console.log("Reject:", error));
+
+```
+
+#### Important difference
+If you place your error handler inside .then(), the error will **NOT** be passed to .catch() afterward.
+
+```ts
+loadScript(url)
+  .then(
+    result => console.log("Success:", result),
+    error => console.log("Then Rejected:", error)  // handles the rejection!
+  )
+  .catch(err => console.log("Catch:", err)); // this will NOT run
+
 ```
 
 Validate image
