@@ -1,10 +1,25 @@
-A Promise is a proxy for a value not necessarily known when the promise is created. 
-It allows you to associate handlers with an asynchronous action's eventual success value or failure reason. This lets asynchronous methods return values like synchronous methods: instead of immediately returning the final value, the asynchronous method returns a promise to supply the value at some point in the future.
-A Promise is in one of these states:
+A **Promise** in JavaScript is an object that represents the eventual result of an asynchronous operation. Instead of returning a final value right away, an asynchronous function returns a Promise, which acts as a placeholder for a value that will be available in the future.
 
-* pending: initial state, neither fulfilled nor rejected.
-* fulfilled: meaning that the operation completed successfully.
-* rejected: meaning that the operation failed.
+A Promise provides a cleaner way to work with asynchronous code by letting you register callbacks for two possible outcomes:
+
+- The operation succeeds → the Promise becomes `fulfilled` and provides a result.
+
+- The operation fails → the Promise becomes `rejected` and provides an error reason.
+
+This makes asynchronous code easier to reason about, since you can attach handlers to the Promise instead of passing around nested callbacks.
+
+#### Promise States
+
+A Promise can be in exactly one of the following states:
+
+* Pending – The asynchronous operation has not yet completed.
+
+* Fulfilled – The operation completed successfully, and the Promise has a resolved value.
+
+* Rejected – The operation failed, and the Promise has a reason for the failure.
+
+Once a Promise is fulfilled or rejected, its state becomes **settled**, and it cannot change again.
+
 
 ```ts
 var promise = new Promise(function(resolve, reject) {
@@ -14,6 +29,56 @@ var promise = new Promise(function(resolve, reject) {
 }
 
 promise.then(onFulfilled, onRejected)
+```
+
+#### Creating a Promise
+
+You can create a Promise using the Promise constructor. The constructor takes a function (called the executor) with two parameters:
+
+- **resolve** – call this when the operation completes successfully
+- **reject** – call this when the operation fails
+
+```ts
+const myPromise = new Promise((resolve, reject) => {
+  // asynchronous operation
+  const success = true;
+
+  if (success) {
+    resolve("Operation completed successfully.");
+  } else {
+    reject("Something went wrong.");
+  }
+});
+
+```
+The executor runs immediately when the Promise is created. The Promise itself, however, represents a result that may not be available yet.
+
+#### Handling Promise Results
+To react to the outcome of a Promise, you use:
+
+- **then()** Runs when the Promise is fulfilled.
+```ts
+myPromise.then(value => {
+  console.log(value); // "Operation completed successfully."
+});
+
+```
+
+- **catch()**
+Runs when the Promise is rejected.
+```ts
+myPromise.catch(error => {
+  console.error(error); // "Something went wrong."
+});
+
+```
+
+- **finally()** Runs regardless of whether the Promise was fulfilled or rejected. Useful for cleanup logic.
+```ts
+myPromise.finally(() => {
+  console.log("Finished processing the promise.");
+});
+
 ```
 
 
@@ -183,10 +248,12 @@ Promise.all([
   new Promise((resolve, reject) => setTimeout(() => resolve(3), 3000))
 ]).catch(alert);
 ```
-After 0.5 second will catch error `Error!`. In case of an error, other promises are ignored. **Note** this does not mean that fetch requests for example will be cancelled.
-If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored. `Promise.all` does nothing to cancel them, as there’s no concept of 'cancellation' in promises
+After 0.5 second will catch error `Error!`. In case of an error, other promises are ignored.
 
-**Note** The setTimeout will still works after Promise catch error. The thing is its never goes to `then()` block of `Promise.all(...)`
+- **Note** this does not mean that fetch requests for example will be **cancelled**.
+If one promise rejects, `Promise.all` immediately rejects, completely forgetting about the other ones in the list. Their results are ignored. `Promise.all` does nothing to cancel them, as there’s no concept of **cancellation** in promises
+
+- **Note** The setTimeout will still works after Promise catch error. The thing is its never goes to `then()` block of `Promise.all(...)`
 
 To handle error and continue Promise chain work need to add `catch` to promise and return error.
 
@@ -209,10 +276,10 @@ const p = Promise.all([
 
 
 ## Promise.allSettled
-Promise.all rejects as a whole if any promise rejects. That’s good for 'all or nothing' cases, when we need all results successful to proceed. Promise.allSettled just waits for all promises to settle, regardless of the result. The resulting array has:
+Promise.all rejects as a whole if any promise rejects. That’s good for 'all or nothing' cases, when we need all results successful to proceed. `Promise.allSettled` just waits for all promises to settle, regardless of the result. The resulting array has:
 
-- {status:"fulfilled", value:result} for successful responses,
-- {status:"rejected", reason:error} for errors.
+- `{status:"fulfilled", value:result}` for successful responses,
+- `{status:"rejected", reason:error}` for errors.
 
 [Stackblitz Example](https://stackblitz.com/edit/a-promise-all-settled?file=index.js)
 
@@ -251,7 +318,7 @@ inside catch block test
 
 In this example error is not catched:
 
-```
+```ts
 try {
     Promise.reject('test')
 } catch(error) {
