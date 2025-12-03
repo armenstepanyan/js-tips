@@ -210,3 +210,32 @@ Output
 [ColorLogService]: User works 
 [Value is]:  Person works  // person is projected so it use LogService print
 ```
+### 1. useClass
+`useClass` tells Angular: “When someone asks for this token, create a new instance of this class.”
+
+### 2. useExisting
+`useExisting` tells Angular: “When someone asks for this token, give them the already existing instance of another token.”
+
+### 3. useFactory
+`useFactory` tells Angular: “When someone asks for this token, run this factory function to create the instance, and provide the result.”
+So instead of Angular automatically instantiating a class (useClass) or aliasing (useExisting), you have **full control** over how the object is created.
+
+```ts
+function createEngine() {
+  return {
+    start: () => console.log('Engine started via factory')
+  };
+}
+
+@NgModule({
+  providers: [
+    { provide: 'Engine', useFactory: createEngine }
+  ]
+})
+export class AppModule {}
+
+```
+
+- Here, when Angular injects 'Engine', it will call createEngine() and return that object.
+- You can return any object, not just classes.
+
