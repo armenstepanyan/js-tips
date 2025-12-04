@@ -287,3 +287,17 @@ These headers enable controlled cross-origin access to resources. They allow ser
     
 -   **Access-Control-Max-Age** – Specifies how long the results of a preflight request can be cached (in seconds).
 
+##  Headers Controlled by the Browser
+Some HTTP headers are managed automatically by the browser and cannot be fully modified by JavaScript or even by the server in some cases. These are often related to security or network behavior. Examples:
+| Header             | Who Controls          | Notes                                                                                            |
+| ------------------ | --------------------- | ------------------------------------------------------------------------------------------------ |
+| **Host**           | Browser / TCP stack   | Set automatically from URL; server cannot override it.                                           |
+| **Origin**         | Browser               | Automatically set for cross-origin requests; JS cannot modify it for security reasons.           |
+| **Referer**        | Browser               | JS can’t arbitrarily change it (except limited with `<a rel="noreferrer">` or `referrerPolicy`). |
+| **User-Agent**     | Browser               | Some browsers let you spoof it via dev tools, but JS cannot modify it in requests.               |
+| **Content-Length** | Browser / HTTP client | Calculated automatically from the body; you cannot set it from JS.                               |
+| **Connection**     | Browser / TCP         | Managed by the network stack; cannot be reliably changed.                                        |
+| **Cookie**         | Partly modifiable     | JS can only modify non-`HttpOnly` cookies; `HttpOnly` cookies are not accessible via JS.         |
+
+
+
